@@ -9,27 +9,39 @@ import TaskModal from "./TaskModal";
  * if not authenticated - fetch localStorage tasks
  */
 
-export default function Task() {
+type statusType = "Todo" | "In Progress" | "Done";
+
+export default function Task({
+  id,
+  title,
+  description,
+  status,
+}: {
+  id: number;
+  title: string;
+  description: string;
+  status: statusType;
+}) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <div
-          className="flex justify-between border rounded my-4 p-3 hover:bg-slate-100 cursor-pointer"
+          className="flex justify-between border rounded-md my-5 p-3 hover:bg-slate-100 cursor-pointer"
           onClick={() => {
             console.log("clicked");
           }}
         >
-          <div className="flex flex-col border w-5/6">
+          <div className="flex flex-col w-5/6">
             <div className="w-fit">
-              <h1 className="text-lg hover:underline">task title</h1>
+              <h1 className="text-lg hover:underline">{title}</h1>
             </div>
-            <div className="mt-1 text-sm">desc</div>
+            <div className="mt-1 text-sm">{description}</div>
           </div>
-          <div className="border flex flex-col">
+          <div className="flex flex-col">
             <div className="text-sm">
-              <TaskStatus status="In Progress" />
+              <TaskStatus status={status} />
             </div>
-            <div className="text-sm">due date</div>
+            {/* <div className="text-sm">due date</div> */}
           </div>
         </div>
       </Dialog.Trigger>
