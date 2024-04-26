@@ -1,7 +1,12 @@
 import express from "express";
 import taskRoutes from './routes/routes';
 import cors from 'cors';
+// import dotenv from 'dotenv';
 
+// dotenv.config();
+// console.log(process.env);
+
+// // require('dotenv').config();
 const app = express();
 const PORT = process.env.port || 3000;
 
@@ -17,7 +22,7 @@ app.get('/health', (req, res) => {
 app.use('/api/:userId', taskRoutes);
 
 app.get('/', (req, res) => {
-  console.log("inside / get route......request object -> ", req);
+  console.log("inside / get route......");
   res.json({ message: "new rrrrruuuuuuuuuaaaaaaaayyyyyiiiyy" });
 });
 

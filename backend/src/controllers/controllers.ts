@@ -25,7 +25,7 @@ async function createTask(req: Request, res: Response) {
       title: JSON.stringify(title),
       description: JSON.stringify(description),
       status: JSON.stringify(status),
-      dueDate: dueDate
+      // dueDate: dueDate
     };
     const taskId = await taskService.createTask(userId, taskParams);
     if (!taskId) throw new Error("500 task not created: createTask controller");
@@ -45,7 +45,7 @@ async function updateTask(req: Request, res: Response) {
       title: JSON.stringify(title),
       description: JSON.stringify(description),
       status: JSON.stringify(status),
-      dueDate: dueDate
+      // dueDate: dueDate
     };
     const isTaskUpdated = await taskService.updateTask(taskId, taskParams);
     if (!isTaskUpdated) {

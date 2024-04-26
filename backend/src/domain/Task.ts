@@ -2,7 +2,7 @@ interface TaskOptions {
   title: string;
   description: string;
   status: TaskStatus;
-  dueDate?: Date;
+  // dueDate?: Date;
 }
 
 export class Task {
@@ -12,11 +12,11 @@ export class Task {
   private status = TaskStatus.Todo;
   private dueDate: any | null;
 
-  constructor({ title, description, status, dueDate }: TaskOptions) {
+  constructor({ title, description, status }: TaskOptions) {
     this.title = title;
     this.description = description;
     this.status = status;
-    this.dueDate = dueDate;
+    // this.dueDate = dueDate;
   }
 
   setTitle(title: string) {
@@ -31,7 +31,7 @@ export class Task {
     this.status = status;
   }
 
-  setDueDate(dueDate: any) {
-    this.dueDate = dueDate;
-  }
+  // setDueDate(dueDate: any) {
+  //   this.dueDate = dueDate;
+  // }
 }
