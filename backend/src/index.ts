@@ -3,7 +3,7 @@ import taskRoutes from './routes/routes';
 import cors from 'cors';
 
 const app = express();
-const PORT = process.env.port || 80;
+const PORT = process.env.port || 3000;
 
 app.use(express.json());
 

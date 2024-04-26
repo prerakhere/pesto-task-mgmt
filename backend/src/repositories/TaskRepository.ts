@@ -10,7 +10,12 @@ interface Task {
 
 export default class TaskRepository implements ITaskRepository {
   async getAllTasks(userId: string): Promise<Task[]> {
-    return Promise.resolve([]);
+    return Promise.resolve([{
+      title: 'titlee',
+      description: 'desc',
+      status: 'statuss',
+      dueDate: 'duedate'
+    }]);
   }
 
   async createTask(userId: string, newTask: Task): Promise<boolean> {

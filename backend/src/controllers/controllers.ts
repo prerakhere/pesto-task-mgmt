@@ -8,8 +8,8 @@ async function getAllTasks(req: Request, res: Response) {
   try {
     const { userId } = req.params;
     const allTaskItems = await taskService.getAllTasks(userId);
-    if (allTaskItems) res.json({ allTaskItems });
-    throw new Error("no tasks found");
+    if (allTaskItems.length) res.json({ allTaskItems });
+    else throw new Error("no tasks found");
   } catch (e: any) {
     console.log("getAllTasks ", e);
     res.status(500).json({ error: '500 getAllTasks' });
