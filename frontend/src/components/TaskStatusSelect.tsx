@@ -14,14 +14,18 @@ import {
   ChevronUpIcon,
 } from "@radix-ui/react-icons";
 
-export default function TaskStatusSelect() {
+export default function TaskStatusSelect({
+  status,
+}: {
+  status: "Todo" | "In Progress" | "Done";
+}) {
   return (
-    <Select.Root defaultValue="1">
+    <Select.Root defaultValue={status.replace(/ /g, "").toLowerCase()}>
       <Select.Trigger
         className="inline-flex items-center justify-center rounded-sm px-3 py-2 text-[13px] leading-none bg-white border border-gray-700 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
         aria-label="Status"
       >
-        <Select.Value defaultValue="1" />
+        <Select.Value />
         <Select.Icon className="ml-4">
           <ChevronDownIcon />
         </Select.Icon>
@@ -41,7 +45,7 @@ export default function TaskStatusSelect() {
                 Fruits
               </Select.Label> */}
               <Select.Item
-                value="1"
+                value="todo"
                 className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
               >
                 <Select.ItemText className="flex">
@@ -53,7 +57,7 @@ export default function TaskStatusSelect() {
                 </Select.ItemIndicator>
               </Select.Item>
               <Select.Item
-                value="2"
+                value="inprogress"
                 className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
               >
                 <Select.ItemText className="flex">
@@ -65,7 +69,7 @@ export default function TaskStatusSelect() {
                 </Select.ItemIndicator>
               </Select.Item>
               <Select.Item
-                value="3"
+                value="done"
                 className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
               >
                 <Select.ItemText className="flex">

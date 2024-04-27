@@ -16,7 +16,7 @@ export default function SortAndFilterBar({
   handleSortChange = (f) => f,
 }: ISortAndFilterBarProps) {
   return (
-    <div className="flex justify-between border my-5">
+    <div className="flex justify-between my-5">
       <div>
         Filter
         <div className="inline-block">

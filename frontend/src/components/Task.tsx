@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import TaskStatus from "./TaskStatus";
 import TaskModal from "./TaskModal";
@@ -16,14 +16,17 @@ export default function Task({
   title,
   description,
   status,
+  triggerRerender,
 }: {
   id: number;
   title: string;
   description: string;
   status: statusType;
+  triggerRerender: () => void;
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <Dialog.Root>
+    <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
       <Dialog.Trigger asChild>
         <div
           className="flex justify-between border rounded-md my-5 p-3 hover:bg-slate-100 cursor-pointer"
@@ -45,7 +48,14 @@ export default function Task({
           </div>
         </div>
       </Dialog.Trigger>
-      <TaskModal />
+      <TaskModal
+        id={id}
+        title={title}
+        description={description}
+        status={status}
+        triggerRerender={triggerRerender}
+        setIsModalOpen={setIsModalOpen}
+      />
     </Dialog.Root>
   );
 }

@@ -33,7 +33,13 @@ const dummyTasks: {
   },
 ];
 
-export default function TaskList({ filterParam }: { filterParam: string }) {
+export default function TaskList({
+  filterParam,
+  triggerRerender,
+}: {
+  filterParam: string;
+  triggerRerender: () => void;
+}) {
   const filteredTasks = dummyTasks.filter((task) => {
     if (filterParam === "") return task;
     return task.statusCode === filterParam;
@@ -49,7 +55,9 @@ export default function TaskList({ filterParam }: { filterParam: string }) {
             description: string;
             status: statusType;
           }) => {
-            return <Task {...task} />;
+            return (
+              <Task {...task} key={task.id} triggerRerender={triggerRerender} />
+            );
           }
         )}
       </div>

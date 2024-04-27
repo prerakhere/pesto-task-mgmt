@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import TaskList from "./components/TaskList";
 import SortAndFilterBar from "./components/SortAndFilterBar";
+import SearchAndOptionsBar from "./components/SearchAndOptionsBar";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -13,6 +14,7 @@ function Home() {
   const queryParams = useQuery();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
+  const [trigger, setTrigger] = useState(false);
   console.log("query...", queryParams);
 
   let filterParam = queryParams.get("status") || "";
@@ -67,6 +69,11 @@ function Home() {
     navigate({ pathname: location.pathname, search: searchParams.toString() });
   }
 
+  const triggerRerender = () => {
+    // This toggles the state, ensuring a re-render each time it's called
+    setTrigger((prev) => !prev);
+  };
+
   console.log("location...", location); // logs "?d=2&s=3"
   // console.log("navigate...", navigate); // logs
   // navigate("/ok");
@@ -76,13 +83,15 @@ function Home() {
     <div className="flex justify-center mt-10">
       <div className="w-1/2">
         <Navbar />
+        <SearchAndOptionsBar triggerRerender={triggerRerender} />
         <SortAndFilterBar
           currFilterParam={filterParam}
           currSortParam={sortParam}
           handleFilterChange={handleFilterChange}
           handleSortChange={handleSortChange}
+          // triggerRerender={triggerRerender}
         />
-        <TaskList filterParam={filterParam} />
+        <TaskList filterParam={filterParam} triggerRerender={triggerRerender} />
         {!isAuthenticated && <></>}
         {isAuthenticated && <>authenticated tasks</>}
       </div>
