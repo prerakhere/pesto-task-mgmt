@@ -7,16 +7,18 @@ import {
 } from "@radix-ui/react-icons";
 
 interface IFilterSelectProps {
+  currFilterParam: string;
   handleFilterChange: (newFilter: string) => void;
 }
 
 export default function FilterSelect({
+  currFilterParam,
   handleFilterChange = (f) => f,
 }: IFilterSelectProps) {
   return (
     <div className="ml-1 border border-red-400">
       <Select.Root
-        defaultValue="0"
+        defaultValue={currFilterParam !== "" ? currFilterParam : "all"}
         onValueChange={(value) => handleFilterChange(value)}
       >
         <Select.Trigger
@@ -42,7 +44,7 @@ export default function FilterSelect({
                 Fruits
               </Select.Label> */}
                 <Select.Item
-                  value="0"
+                  value="all"
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
@@ -53,7 +55,7 @@ export default function FilterSelect({
                   </Select.ItemIndicator>
                 </Select.Item>
                 <Select.Item
-                  value="1"
+                  value="todo"
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
@@ -65,7 +67,7 @@ export default function FilterSelect({
                   </Select.ItemIndicator>
                 </Select.Item>
                 <Select.Item
-                  value="2"
+                  value="inprogress"
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
@@ -77,7 +79,7 @@ export default function FilterSelect({
                   </Select.ItemIndicator>
                 </Select.Item>
                 <Select.Item
-                  value="3"
+                  value="done"
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">

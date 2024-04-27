@@ -15,28 +15,28 @@ const dummyTasks: {
     title: "Do frontend of task management app.",
     description: "some description 1",
     status: "Todo",
-    statusCode: "1",
+    statusCode: "todo",
   },
   {
     id: 2,
     title: "Do backend of task management app.",
     description: "some description 2",
     status: "In Progress",
-    statusCode: "2",
+    statusCode: "inprogress",
   },
   {
     id: 3,
     title: "Do infra of task management app.",
     description: "some description 3",
     status: "Done",
-    statusCode: "3",
+    statusCode: "done",
   },
 ];
 
-export default function TaskList({ statusFilter }: { statusFilter: string }) {
+export default function TaskList({ filterParam }: { filterParam: string }) {
   const filteredTasks = dummyTasks.filter((task) => {
-    if (statusFilter === "") return task;
-    return task.statusCode === statusFilter;
+    if (filterParam === "") return task;
+    return task.statusCode === filterParam;
   });
 
   return (

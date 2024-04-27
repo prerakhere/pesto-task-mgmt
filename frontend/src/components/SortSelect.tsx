@@ -6,15 +6,26 @@ import {
   ChevronUpIcon,
 } from "@radix-ui/react-icons";
 
-export default function SortSelect() {
+interface ISortSelectProps {
+  currSortParam: string;
+  handleSortChange: (sortParam: string) => void;
+}
+
+export default function SortSelect({
+  currSortParam,
+  handleSortChange = (f) => f,
+}: ISortSelectProps) {
   return (
     <div className="ml-1 border border-red-400">
-      <Select.Root defaultValue="1">
+      <Select.Root
+        defaultValue={currSortParam !== "" ? currSortParam : "lastadded"}
+        onValueChange={(value) => handleSortChange(value)}
+      >
         <Select.Trigger
           className="inline-flex items-center justify-center rounded-sm px-3 py-2 text-[13px] leading-none bg-white border border-gray-700 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
           aria-label="Status"
         >
-          <Select.Value defaultValue="1" />
+          <Select.Value />
           <Select.Icon className="ml-4">
             <ChevronDownIcon />
           </Select.Icon>
@@ -34,7 +45,7 @@ export default function SortSelect() {
                 Fruits
               </Select.Label> */}
                 <Select.Item
-                  value="1"
+                  value="lastadded"
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
@@ -45,7 +56,7 @@ export default function SortSelect() {
                   </Select.ItemIndicator>
                 </Select.Item>
                 <Select.Item
-                  value="2"
+                  value="firstadded"
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
@@ -56,7 +67,7 @@ export default function SortSelect() {
                   </Select.ItemIndicator>
                 </Select.Item>
                 <Select.Item
-                  value="3"
+                  value="duedate"
                   disabled
                   className="text-[13px] text-gray-400 leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >

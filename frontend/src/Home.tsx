@@ -15,27 +15,55 @@ function Home() {
   const [tasks, setTasks] = useState([]);
   console.log("query...", queryParams);
 
-  const statusFilter = queryParams.get("status") || "";
+  let filterParam = queryParams.get("status") || "";
+  let sortParam = queryParams.get("sortBy") || "";
+  if (
+    filterParam !== "all" &&
+    filterParam !== "todo" &&
+    filterParam !== "inprogress" &&
+    filterParam !== "done"
+  ) {
+    filterParam = "";
+  }
 
-  function handleFilterChange(newFilter: string) {
-    //   if(newFilter === "0") {
-    //     // navigate(`?status=${newFilter}`);
-    //     if(queryParams.has('status')) {
-    //       queryParams.delete('status');
-    //     }
-    //   }
-    //   // Update the URL
-    //   navigate(`?status=${newFilter}`);
+  if (
+    sortParam !== "lastadded" &&
+    sortParam !== "firstadded" &&
+    sortParam !== "duedate"
+  ) {
+    sortParam = "";
+  }
+
+  function handleFilterChange(filterParam: string) {
     const searchParams = new URLSearchParams(location.search);
 
-    if (newFilter === "0") {
-      // Remove the status parameter when "0"
+    if (filterParam === "all") {
       searchParams.delete("status");
+      console.log("inside if block");
+    } else if (
+      filterParam === "todo" ||
+      filterParam === "inprogress" ||
+      filterParam === "done"
+    ) {
+      searchParams.set("status", filterParam);
+      console.log("inside else if block");
     } else {
-      searchParams.set("status", newFilter);
+      console.log("inside else block");
+      searchParams.delete("status");
+      // searchParams.set("status", "all");
     }
 
     // Navigate with the new query string
+    navigate({ pathname: location.pathname, search: searchParams.toString() });
+  }
+
+  function handleSortChange(sortParam: string) {
+    const searchParams = new URLSearchParams(location.search);
+    // if (sortParam === "lastadded") {
+    //   searchParams.delete("sortBy");
+    // } else {
+    searchParams.set("sortBy", sortParam);
+    // }
     navigate({ pathname: location.pathname, search: searchParams.toString() });
   }
 
@@ -48,8 +76,13 @@ function Home() {
     <div className="flex justify-center mt-10">
       <div className="w-1/2">
         <Navbar />
-        <SortAndFilterBar handleFilterChange={handleFilterChange} />
-        <TaskList statusFilter={statusFilter} />
+        <SortAndFilterBar
+          currFilterParam={filterParam}
+          currSortParam={sortParam}
+          handleFilterChange={handleFilterChange}
+          handleSortChange={handleSortChange}
+        />
+        <TaskList filterParam={filterParam} />
         {!isAuthenticated && <></>}
         {isAuthenticated && <>authenticated tasks</>}
       </div>
