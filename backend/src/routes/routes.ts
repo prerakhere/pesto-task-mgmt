@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getAllTasks,
+  getTask,
   createTask,
   updateTask,
   deleteTask
@@ -12,10 +13,12 @@ const router = express.Router({ mergeParams: true });
 
 router.get('/task', getAllTasks);
 
+router.get('/task/:taskId', getTask);
+
 router.post('/task', createTask);
 
-router.put('/:taskId', updateTask);
+router.put('/task/:taskId', updateTask);
 
-router.delete('/:taskId', deleteTask);
+router.delete('/task/:taskId', deleteTask);
 
 export default router;

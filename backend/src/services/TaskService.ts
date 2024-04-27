@@ -9,23 +9,47 @@ export default class TaskService {
   }
 
   async getAllTasks(userId: string) {
-    const allTasks = await this.taskRepository.getAllTasks(userId);
-    return allTasks;
+    try {
+      const allTasks = await this.taskRepository.getAllTasks(userId);
+      return allTasks;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getTaskById(taskId: string) {
+    try {
+      const task = await this.taskRepository.getTaskById(taskId);
+      return task;
+    } catch (err) {
+      throw err;
+    }
   }
 
   async createTask(userId: string, newTask: Task) {
-    const isNewTaskAdded = this.taskRepository.createTask(userId, newTask);
-    return isNewTaskAdded;
+    try {
+      const createdTask = this.taskRepository.createTask(userId, newTask);
+      return createdTask;
+    } catch (err) {
+      throw err;
+    }
   }
 
-  async updateTask(taskId: string, updatedTask: Task) {
-    const isTaskUpdated = await this.taskRepository.updateTask(taskId, updatedTask);
-    return isTaskUpdated;
+  async updateTask(taskId: string, taskToBeUpdated: Task) {
+    try {
+      const updatedTask = this.taskRepository.updateTask(taskId, taskToBeUpdated);
+      return updatedTask;
+    } catch (err) {
+      throw err;
+    }
   }
 
   async deleteTask(taskId: string) {
-    const isTaskDeleted = this.taskRepository.deleteTask(taskId);
-    return isTaskDeleted;
+    try {
+      const deletedTask = this.taskRepository.deleteTask(taskId);
+      return deletedTask;
+    } catch (err) {
+      throw err;
+    }
   }
-
 }
