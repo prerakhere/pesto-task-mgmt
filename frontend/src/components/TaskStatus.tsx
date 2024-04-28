@@ -1,5 +1,3 @@
-import React from "react";
-
 const TaskStatusColors = {
   Todo: "bg-red-600",
   "In Progress": "bg-orange-500",

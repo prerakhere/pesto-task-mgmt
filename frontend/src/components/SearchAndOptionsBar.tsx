@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import TaskModal from "./TaskModal";

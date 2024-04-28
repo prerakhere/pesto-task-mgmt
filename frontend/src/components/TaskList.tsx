@@ -1,4 +1,3 @@
-import React from "react";
 import Task from "./Task";
 
 type statusType = "Todo" | "In Progress" | "Done";

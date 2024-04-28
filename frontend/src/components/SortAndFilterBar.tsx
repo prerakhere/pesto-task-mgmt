@@ -1,4 +1,3 @@
-import React from "react";
 import FilterSelect from "./FilterSelect";
 import SortSelect from "./SortSelect";
 
