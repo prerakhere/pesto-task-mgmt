@@ -13,10 +13,19 @@ function Home() {
   // const location = useLocation();
   const queryParams = useQuery();
   const navigate = useNavigate();
+  const authInfo = {};
+  const [token, setToken] = useState("");
   const [tasks, setTasks] = useState([]);
   const [trigger, setTrigger] = useState(false);
   console.log("query...", queryParams);
 
+  /**
+   * 1. set received token in localstorage
+
+2. fetch user id based on email id from db
++
+3. get all tasks from db of that user id
+   */
   let filterParam = queryParams.get("status") || "";
   let sortParam = queryParams.get("sortBy") || "";
   if (

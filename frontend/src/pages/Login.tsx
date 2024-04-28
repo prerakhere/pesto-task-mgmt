@@ -1,7 +1,27 @@
-import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "../../config/auth-config";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function handleLogin() {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw new Error(error.message);
+      // alert("check email for verification link");
+      console.log(data);
+    } catch (err: any) {
+      // console.log(err)
+      alert(err.message);
+    }
+  }
+
   return (
     <div className="flex items-center justify-center mt-20 border w-full">
       <div className="border px-16 py-14 w-5/6 max-w-[400px]">
@@ -15,8 +35,8 @@ export default function Login() {
           <input
             type="email"
             id="email"
-            // value={email}
-            // onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800"
             placeholder="Enter email"
             required
@@ -32,8 +52,8 @@ export default function Login() {
           <input
             type="password"
             id="password"
-            // value={password}
-            // onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800"
             placeholder="Enter password"
             required
@@ -42,6 +62,7 @@ export default function Login() {
         <div className="flex items-center justify-center">
           <button
             type="submit"
+            onClick={handleLogin}
             className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
           >
             Login
