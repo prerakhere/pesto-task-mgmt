@@ -14,7 +14,7 @@ app.use(express.json());
 
 
 app.get('/health', (req, res) => {
-  console.log("inside health get route......request object -> ", req);
+  console.log("inside health get route......request object -> ");
   res.status(200).json({ message: "server healthy" });
 });
 
