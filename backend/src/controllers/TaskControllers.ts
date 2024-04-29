@@ -4,6 +4,7 @@ import TaskService from "../services/TaskService";
 
 const taskService = new TaskService(new TaskRepository());
 
+
 async function getAllTasks(req: Request, res: Response) {
   try {
     const { userId } = req.params;

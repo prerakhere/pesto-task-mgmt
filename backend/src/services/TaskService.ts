@@ -1,4 +1,4 @@
-import Task from "../domain/interfaces/ITask";
+import Task from "../repositories/response-contracts/ITask";
 import TaskRepository from "../repositories/TaskRepository";
 
 export default class TaskService {
@@ -7,6 +7,7 @@ export default class TaskService {
   constructor(taskRepository: TaskRepository) {
     this.taskRepository = taskRepository;
   }
+
 
   async getAllTasks(userId: string) {
     try {

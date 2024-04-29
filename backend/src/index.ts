@@ -1,5 +1,6 @@
 import express from "express";
-import taskRoutes from './routes/routes';
+import taskRoutes from './routes/TaskRoutes';
+import userRoutes from './routes/TaskRoutes';
 import cors from 'cors';
 // import dotenv from 'dotenv';
 
@@ -19,6 +20,7 @@ app.get('/health', (req, res) => {
 });
 
 
+app.use('/api/user', userRoutes);
 app.use('/api/:userId', taskRoutes);
 
 app.get('/', (req, res) => {

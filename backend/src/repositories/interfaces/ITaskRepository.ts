@@ -1,4 +1,4 @@
-import Task from "../domain/interfaces/ITask";
+import Task from "../response-contracts/ITask";
 
 export default interface ITaskRepository {
   getAllTasks(userId: string): Promise<Task[]>;

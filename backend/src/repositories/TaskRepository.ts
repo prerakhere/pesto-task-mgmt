@@ -1,9 +1,11 @@
 import supabase from "../../config/db-config";
-import Task from "../domain/interfaces/ITask";
-import ITaskRepository from "./ITaskRepository";
+import Task from "./response-contracts/ITask";
+import ITaskRepository from "./interfaces/ITaskRepository";
 
 
 export default class TaskRepository implements ITaskRepository {
+
+
   async getAllTasks(userId: string): Promise<Task[]> {
     try {
       const { error, data } = await supabase.from('task').select().eq('user_id', userId);
