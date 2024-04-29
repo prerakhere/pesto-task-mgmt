@@ -1,6 +1,6 @@
 import express from "express";
 import taskRoutes from './routes/TaskRoutes';
-import userRoutes from './routes/TaskRoutes';
+import userRoutes from './routes/UserRoutes';
 import cors from 'cors';
 // import dotenv from 'dotenv';
 

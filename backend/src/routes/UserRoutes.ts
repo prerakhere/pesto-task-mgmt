@@ -6,6 +6,6 @@ import {
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/user', getUserData);
+router.get('/', getUserData);
 
 export default router;

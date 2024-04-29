@@ -10,7 +10,7 @@ export default class UserRepository implements IUserRepository {
       console.log("------------- user data / id -------------");
       console.log(data);
       if (error) throw new Error("getUserData: can't fetch user data");
-      if (data[0].id) return data[0].id;
+      if (data.length && data[0].id) return data[0].id;
       return null;
     } catch (err: any) {
       console.log("getUserData repository ", err);
