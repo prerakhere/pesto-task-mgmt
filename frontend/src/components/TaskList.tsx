@@ -45,7 +45,7 @@ export default function TaskList({
   });
 
   return (
-    <main className="w-full mt-5">
+    <main className="w-full mt-8">
       <div className="">
         {filteredTasks.map(
           (task: {

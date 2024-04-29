@@ -15,17 +15,17 @@ export default function SortSelect({
   handleSortChange = (f) => f,
 }: ISortSelectProps) {
   return (
-    <div className="ml-1 border border-red-400">
+    <div className="ml-1.5">
       <Select.Root
         defaultValue={currSortParam !== "" ? currSortParam : "lastadded"}
         onValueChange={(value) => handleSortChange(value)}
       >
         <Select.Trigger
-          className="inline-flex items-center justify-center rounded-sm px-3 py-2 text-[13px] leading-none bg-white border border-gray-700 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
-          aria-label="Status"
+          className="inline-flex items-center justify-center rounded-sm  py-1.5 pr-1.5 text-[13px] leading-none bg-white border border-gray-400 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
+          aria-label="Sort By"
         >
           <Select.Value />
-          <Select.Icon className="ml-4">
+          <Select.Icon className="ml-2">
             <ChevronDownIcon />
           </Select.Icon>
         </Select.Trigger>

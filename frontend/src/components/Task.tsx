@@ -29,16 +29,16 @@ export default function Task({
     <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
       <Dialog.Trigger asChild>
         <div
-          className="flex justify-between border rounded-md my-5 p-3 hover:bg-slate-100 cursor-pointer"
+          className="flex justify-between border border-gray-300 rounded-md my-3.5 py-3.5 px-4 hover:bg-violet-100 cursor-pointer hover:border-violet-700 hover:shadow-lg"
           onClick={() => {
             console.log("clicked");
           }}
         >
           <div className="flex flex-col w-5/6">
             <div className="w-fit">
-              <h1 className="text-lg hover:underline">{title}</h1>
+              <h1 className="hover:underline">{title}</h1>
             </div>
-            <div className="mt-1 text-sm">{description}</div>
+            <div className="mt-2 text-sub-sm">{description}</div>
           </div>
           <div className="flex flex-col">
             <div className="text-sm">

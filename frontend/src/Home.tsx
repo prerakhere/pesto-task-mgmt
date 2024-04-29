@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import TaskList from "./components/TaskList";
 import SortAndFilterBar from "./components/SortAndFilterBar";
 import SearchAndOptionsBar from "./components/SearchAndOptionsBar";
+import { useAuth } from "./context/AuthContext";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -88,6 +89,30 @@ function Home() {
   // navigate("/ok");
   const isAuthenticated = false;
 
+  const { session, user } = useAuth();
+  console.log("-------------auth context session-----------");
+  console.log(session);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(
+          "https://d12hukpp1zen6s.cloudfront.net/api/2/task"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const resData = await response.json();
+        console.log("---resData---");
+        console.log(resData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
   return (
     <div className="flex justify-center mt-10">
       <div className="w-1/2">
@@ -98,7 +123,7 @@ function Home() {
           currSortParam={sortParam}
           handleFilterChange={handleFilterChange}
           handleSortChange={handleSortChange}
-          // triggerRerender={triggerRerender}
+          triggerRerender={triggerRerender}
         />
         <TaskList filterParam={filterParam} triggerRerender={triggerRerender} />
         {!isAuthenticated && <></>}
