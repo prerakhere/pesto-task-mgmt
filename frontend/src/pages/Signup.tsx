@@ -1,41 +1,74 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../config/auth-config";
 import { useAuth } from "../context/AuthContext";
+import { isEmailInvalid, isPasswordInvalid } from "../utils/AuthUtils";
+import TextFieldError from "../components/TextFieldError";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({
+    emailErr: "",
+    pwErr: "",
+  });
+  const [serverError, setServerError] = useState("");
+
   const authData = useAuth();
   const navigate = useNavigate();
-  if (authData.session) navigate("/");
+
+  const { session, loading, signUp } = authData;
+
+  useEffect(() => {
+    if (session) navigate("/");
+  }, [session]);
 
   async function handleSignup() {
-    // form validation checks
+    setServerError("");
+    setFieldErrors({
+      emailErr: "",
+      pwErr: "",
+    });
+    const emailErr = isEmailInvalid(email);
+    const pwErr = isPasswordInvalid(password);
+    if (emailErr || pwErr) {
+      console.log(emailErr, pwErr);
+      if (emailErr)
+        setFieldErrors((err) => ({
+          ...err,
+          emailErr,
+        }));
+      if (pwErr)
+        setFieldErrors((err) => ({
+          ...err,
+          pwErr,
+        }));
+      return;
+    }
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+      const { error } = await signUp(email, password);
 
       if (error) throw new Error(error.message);
       // alert("check email for verification link");
-      console.log(data);
+      // console.log(data);
     } catch (err: any) {
       // console.log(err)
-      alert(err.message);
+      if (err.message === "Invalid login credentials")
+        setServerError("Incorrect email or password!");
+      else setServerError(err.message);
     }
   }
 
   return (
     <>
+      {loading && <p>loading...</p>}
       {!authData.session && (
         <div className="flex items-center justify-center mt-20 border w-full">
           <div className="border px-16 py-14 w-5/6 max-w-[400px]">
-            <div className="mb-4">
+            <div className="">
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-bold mb-1.5"
                 htmlFor="email"
               >
                 Email
@@ -45,14 +78,15 @@ export default function Signup() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800 text-sub-base -mb-[3px]"
                 placeholder="Enter email"
                 required
               />
+              <TextFieldError error={fieldErrors.emailErr} />
             </div>
-            <div className="mb-8">
+            <div className="mt-5">
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-bold mb-1.5"
                 htmlFor="password"
               >
                 Password
@@ -62,12 +96,20 @@ export default function Signup() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800 text-sub-base -mb-[3px]"
                 placeholder="Enter password"
                 required
               />
+              <TextFieldError error={fieldErrors.pwErr} />
             </div>
-            <div className="flex items-center justify-center">
+            {serverError && (
+              <div className="flex justify-center items-center mt-5">
+                <span className="text-over-xs max-w-fit py-1.5 px-4 rounded-sm text-red-700 border border-red-600 bg-red-100">
+                  {serverError}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center justify-center mt-7">
               <button
                 type="submit"
                 onClick={handleSignup}
@@ -77,7 +119,7 @@ export default function Signup() {
               </button>
             </div>
             <div className="flex justify-center mt-1.5">
-              <p className="text-sm">
+              <p className="text-over-xs">
                 Already a user?{" "}
                 <Link
                   to={"/login"}
