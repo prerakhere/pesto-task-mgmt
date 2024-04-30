@@ -23,7 +23,7 @@ export default function AccountMenu() {
           </Menubar.Trigger>
           <Menubar.Portal>
             <Menubar.Content
-              className="min-w-[220px] max-w-[250px] rounded shadow-lg border"
+              className="min-w-[220px] max-w-[250px] rounded shadow-lg border bg-white"
               align="end"
               sideOffset={5}
               alignOffset={-4}
