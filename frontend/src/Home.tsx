@@ -143,8 +143,8 @@ function Home() {
   }, [session]);
 
   return (
-    <div className="flex justify-center mt-10">
-      <div className="w-1/2">
+    <div className="flex justify-center mt-10 border border-red-600 w-full">
+      <div className="w-11/12 xs:w-3/4 md:w-2/3 lg:w-7/12 max-w-[700px]">
         <Navbar />
         <SearchAndOptionsBar triggerRerender={triggerRerender} />
         <SortAndFilterBar
