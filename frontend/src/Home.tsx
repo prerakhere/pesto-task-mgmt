@@ -17,7 +17,9 @@ function Home() {
   const authInfo = {};
   const [token, setToken] = useState("");
   const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState("");
   const [trigger, setTrigger] = useState(false);
+  const [areTasksLoading, setAreTasksLoading] = useState(true);
   console.log("query...", queryParams);
 
   /**
@@ -89,29 +91,56 @@ function Home() {
   // navigate("/ok");
   const isAuthenticated = false;
 
-  const { session, user } = useAuth();
+  const { session, user, setUserId } = useAuth();
   console.log("-------------auth context session-----------");
   console.log(session);
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(
-          "https://d12hukpp1zen6s.cloudfront.net/api/2/task"
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
+    if (session) {
+      let userId = "";
+      const fetchUserId = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/user?emailId=${user?.email}`
+          );
+          if (!response.ok) {
+            throw new Error("unable to fetch userId");
+          }
+          const data = await response.json();
+          console.log("?????//  data with userId  ??????//");
+          console.log(data.userData.id);
+          userId = data.userData.id;
+          setUserId(data.userData.id);
+          fetchTasks();
+        } catch (err: any) {
+          if (err.message === "unable to fetch userId")
+            setError("Something went wrong!");
+          else {
+            console.log(err.message);
+            setError(err.message);
+          }
         }
-        const resData = await response.json();
-        console.log("---resData---");
-        console.log(resData);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchTasks();
-  }, []);
+      };
+      fetchUserId();
+      const fetchTasks = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/${userId}/task`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+          const resData = await response.json();
+          console.log("---resData---");
+          console.log(resData);
+          setTasks(resData.allTasks);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    }
+    if (!session) setTasks([]);
+  }, [session]);
 
   return (
     <div className="flex justify-center mt-10">
@@ -125,7 +154,13 @@ function Home() {
           handleSortChange={handleSortChange}
           triggerRerender={triggerRerender}
         />
-        <TaskList filterParam={filterParam} triggerRerender={triggerRerender} />
+        <TaskList
+          filterParam={filterParam}
+          triggerRerender={triggerRerender}
+          setAreTasksLoading={setAreTasksLoading}
+          areTasksLoading={areTasksLoading}
+          tasks={tasks}
+        />
         {!isAuthenticated && <></>}
         {isAuthenticated && <>authenticated tasks</>}
       </div>

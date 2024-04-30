@@ -9,7 +9,7 @@ import TaskModal from "./TaskModal";
  * if not authenticated - fetch localStorage tasks
  */
 
-type statusType = "Todo" | "In Progress" | "Done";
+type statusType = "todo" | "inprogress" | "done";
 
 export default function Task({
   id,

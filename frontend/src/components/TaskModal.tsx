@@ -7,7 +7,7 @@ interface ITaskModalProps {
   id: number;
   title: string;
   description: string;
-  status: "Todo" | "In Progress" | "Done";
+  status: "todo" | "inprogress" | "done";
   triggerRerender: () => void;
   setIsModalOpen: (bool: boolean) => void;
 }

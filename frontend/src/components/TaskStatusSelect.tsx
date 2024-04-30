@@ -16,7 +16,7 @@ import {
 export default function TaskStatusSelect({
   status,
 }: {
-  status: "Todo" | "In Progress" | "Done";
+  status: "todo" | "inprogress" | "done";
 }) {
   return (
     <Select.Root defaultValue={status.replace(/ /g, "").toLowerCase()}>
