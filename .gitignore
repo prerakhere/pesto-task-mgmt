@@ -2,3 +2,6 @@ approach.md
 node_modules
 dist
 .env
+infra/terraform/*
+!infra/terraform/config.tf
+!infra/terraform/main.tf
