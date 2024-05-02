@@ -17,7 +17,19 @@ async function getUserData(req: Request, res: Response) {
   }
 }
 
+async function saveUser(req: Request, res: Response) {
+  try {
+    const { emailId } = req.params;
+    const isUserSaved = await userService.saveUser(emailId as string);
+    if (!isUserSaved) throw new Error("user not saved");
+    res.json({ message: "user saved" });
+  } catch (err) {
+    res.status(500).json({ error: "500 saveUser" });
+  }
+}
+
 
 export {
-  getUserData
+  getUserData,
+  saveUser
 };

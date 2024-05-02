@@ -15,4 +15,16 @@ export default class UserService {
       throw err;
     }
   }
+
+  async saveUser(emailId: string) {
+    try {
+      const isUserSaved = await this.userRepository.saveUser(emailId);
+      if (!isUserSaved) throw new Error("user not saved");
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+
 }

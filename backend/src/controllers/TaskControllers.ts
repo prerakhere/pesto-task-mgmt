@@ -9,6 +9,19 @@ async function getAllTasks(req: Request, res: Response) {
   try {
     const { userId } = req.params;
     const allTasks = await taskService.getAllTasks(userId);
+
+    // 4/27/2024, 4:55:22 PM
+    // console.log(new Date(Date.parse(allTasks[0].created_at)).toLocaleString());
+
+    // 2024-04-27T11:25:22.145Z
+    // console.log(new Date(Date.parse(allTasks[0].created_at)));
+
+    // sorting in descending order of timestamp - default of last added first
+    allTasks.forEach((task) => {
+      task.created_at = new Date(Date.parse(task.created_at));
+    });
+    allTasks.sort((t1, t2) => t2.created_at - t1.created_at);
+    // console.log(allTasks);
     res.json({ allTasks });
   } catch (e: any) {
     console.log("getAllTasks ", e);

@@ -17,4 +17,20 @@ export default class UserRepository implements IUserRepository {
       throw err;
     }
   }
+
+  async saveUser(emailId: string) {
+    try {
+      const { status, error } = await supabase.from('user').insert({
+        email: emailId
+      });
+      if (status === 201) return true;
+      if (error || status !== 201) {
+        throw new Error("saveUser repository");
+      }
+      return false;
+    } catch (err: any) {
+      console.log(err.message);
+      return false;
+    }
+  }
 }
