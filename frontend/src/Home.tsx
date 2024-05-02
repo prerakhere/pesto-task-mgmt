@@ -100,6 +100,7 @@ function Home() {
       let userId = "";
       const fetchUserId = async () => {
         try {
+          setAreTasksLoading(true);
           const response = await fetch(
             `http://localhost:3000/api/user?emailId=${user?.email}`
           );
@@ -134,6 +135,7 @@ function Home() {
           console.log("---resData---");
           console.log(resData);
           setTasks(resData.allTasks);
+          setAreTasksLoading(false);
         } catch (err) {
           console.log(err);
         }
@@ -155,7 +157,8 @@ function Home() {
           triggerRerender={triggerRerender}
         />
         <TaskList
-          filterParam={filterParam}
+          currFilterParam={filterParam}
+          currSortParam={sortParam}
           triggerRerender={triggerRerender}
           setAreTasksLoading={setAreTasksLoading}
           areTasksLoading={areTasksLoading}

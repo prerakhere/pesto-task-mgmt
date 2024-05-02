@@ -42,46 +42,64 @@ interface ITask {
 }
 
 export default function TaskList({
-  filterParam,
+  currFilterParam,
+  currSortParam,
   tasks,
   triggerRerender,
   areTasksLoading,
   setAreTasksLoading,
 }: {
-  filterParam: string;
+  currFilterParam: string;
+  currSortParam: string;
   tasks: ITask[];
   triggerRerender: () => void;
   areTasksLoading: boolean;
   setAreTasksLoading: (loading: boolean) => void;
 }) {
-  const filteredTasks = dummyTasks.filter((task: ITask) => {
-    if (filterParam === "") return task;
-    return task.status === filterParam;
+  const filteredTasks = tasks.filter((task: ITask) => {
+    if (currFilterParam === "") return task;
+    return task.status === currFilterParam;
   });
+
+  filteredTasks.forEach((task) => {
+    task.created_at = new Date(task.created_at);
+  });
+
+  // console.log(typeof filteredTasks[0].created_at);
+
+  if (currSortParam === "firstadded")
+    filteredTasks.sort((t1, t2) => t1.created_at - t2.created_at);
+  console.log(filteredTasks);
 
   return (
     <main className="w-full mt-8">
-      <div className="">
-        {!filteredTasks.length && (
-          <p className="mt-12 text-center text-gray-500">No tasks</p>
+      <div className="border border-red-400">
+        {areTasksLoading ? (
+          "loading"
+        ) : (
+          <>
+            {!filteredTasks.length && (
+              <p className="mt-12 text-center text-gray-500">No tasks</p>
+            )}
+            {filteredTasks.length > 0 &&
+              filteredTasks.map(
+                (task: {
+                  id: number;
+                  title: string;
+                  description: string;
+                  status: statusType;
+                }) => {
+                  return (
+                    <Task
+                      {...task}
+                      key={task.id}
+                      triggerRerender={triggerRerender}
+                    />
+                  );
+                }
+              )}
+          </>
         )}
-        {filteredTasks.length > 0 &&
-          filteredTasks.map(
-            (task: {
-              id: number;
-              title: string;
-              description: string;
-              status: statusType;
-            }) => {
-              return (
-                <Task
-                  {...task}
-                  key={task.id}
-                  triggerRerender={triggerRerender}
-                />
-              );
-            }
-          )}
       </div>
     </main>
   );
