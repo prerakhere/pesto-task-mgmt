@@ -12,7 +12,7 @@ interface AuthContextType {
   session: Session | null | undefined;
   userId: string;
   user: User | null | undefined;
-  loading: boolean;
+  isAuthContextLoading: boolean;
   setUserId: (userId: string) => void;
   signUp: (
     email: string,
@@ -29,7 +29,7 @@ const AuthContext = createContext<AuthContextType>({
   session: null,
   userId: "",
   user: null,
-  loading: false,
+  isAuthContextLoading: true,
   setUserId: () => {},
   signUp: async () => ({ error: null, user: null }),
   signIn: async () => ({ error: null, user: null }),
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isAuthContextLoading, setIsAuthContextLoading] = useState(true);
 
   async function fetchUserId(emailId: string) {
     try {
@@ -73,13 +73,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session.user);
         await fetchUserId(session.user.email!);
       }
-      setLoading(false);
+      setIsAuthContextLoading(false);
 
       const { data: listener } = supabase.auth.onAuthStateChange(
         (_event, session) => {
           setSession(session);
           setUser(session?.user || null);
-          setLoading(false);
+          setIsAuthContextLoading(false);
         }
       );
 
@@ -92,21 +92,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    setLoading(true);
+    setIsAuthContextLoading(true);
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
     });
-    console.log("--------sign up data---------");
-    console.log(data);
-    setUser(data.user);
-    setSession(data.session);
-    setLoading(false);
+    if (error) throw new Error("supabase sign up unsuccessful");
+    const response = await fetch("http://localhost:3000/api/user", {
+      method: "POST",
+      body: JSON.stringify({
+        emailId: email,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("unable to save user to db");
+    }
+    const resData = await response.json();
+    if (resData.message === "user saved") {
+      console.log("--------sign up data---------");
+      console.log(data);
+      setUser(data.user);
+      setSession(data.session);
+      await fetchUserId(email);
+    }
+    setIsAuthContextLoading(false);
     return { error, user };
   };
 
   const signIn = async (email: string, password: string) => {
-    setLoading(true);
+    setIsAuthContextLoading(true);
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -115,7 +132,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log(data);
     setUser(data.user);
     setSession(data.session);
-    setLoading(false);
+    await fetchUserId(email);
+    setIsAuthContextLoading(false);
     return { error, user };
   };
 
@@ -123,13 +141,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setUserId("");
   };
 
   const value = {
     userId,
     user,
     session,
-    loading,
+    isAuthContextLoading,
     setUserId,
     signUp,
     signIn,

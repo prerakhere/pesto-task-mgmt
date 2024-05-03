@@ -4,7 +4,7 @@ import * as Avatar from "@radix-ui/react-avatar";
 import { useAuth } from "../context/AuthContext";
 
 export default function AccountMenu() {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   function handleLogout() {
     signOut();
@@ -23,13 +23,13 @@ export default function AccountMenu() {
           </Menubar.Trigger>
           <Menubar.Portal>
             <Menubar.Content
-              className="min-w-[220px] max-w-[250px] rounded shadow-lg border bg-white"
+              className="min-w-[220px] max-w-[250px] rounded shadow-lg border bg-white flex flex-col"
               align="end"
               sideOffset={5}
               alignOffset={-4}
             >
-              <Menubar.Item className="h-8 flex items-center hover:bg-violet-100 cursor-pointer px-2.5 py-4">
-                emailemailemailema
+              <Menubar.Item className="h-8 flex items-center px-2.5 py-4 cursor-default">
+                {user?.email}
               </Menubar.Item>
               <Menubar.Item
                 className="h-8 flex items-center hover:bg-violet-100 cursor-pointer px-2.5 py-4"

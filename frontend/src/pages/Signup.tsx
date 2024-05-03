@@ -17,7 +17,7 @@ export default function Signup() {
   const authData = useAuth();
   const navigate = useNavigate();
 
-  const { session, loading, signUp } = authData;
+  const { session, isAuthContextLoading, signUp } = authData;
 
   useEffect(() => {
     if (session) navigate("/");
@@ -62,7 +62,7 @@ export default function Signup() {
 
   return (
     <>
-      {loading && <p>loading...</p>}
+      {isAuthContextLoading && <p>loading...</p>}
       {!authData.session && (
         <div className="flex items-center justify-center mt-20 border w-full">
           <div className="border px-16 py-14 w-5/6 max-w-[400px]">

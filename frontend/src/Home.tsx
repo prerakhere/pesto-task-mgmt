@@ -20,6 +20,7 @@ function Home() {
   const [error, setError] = useState("");
   const [trigger, setTrigger] = useState(false);
   const [areTasksLoading, setAreTasksLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   // console.log("query...", queryParams);
 
   /**
@@ -93,7 +94,7 @@ function Home() {
   // navigate("/ok");
   const isAuthenticated = false;
 
-  const { userId } = useAuth();
+  const { userId, isAuthContextLoading } = useAuth();
   console.log("--------userId---------- ", userId);
 
   useEffect(() => {
@@ -123,28 +124,34 @@ function Home() {
   }, [userId, trigger]);
 
   return (
-    <div className="flex justify-center mt-10 border border-red-600 w-full">
-      <div className="w-11/12 xs:w-3/4 md:w-2/3 lg:w-7/12 max-w-[700px]">
-        <Navbar />
-        <SearchAndOptionsBar triggerRerender={triggerRerender} />
-        <SortAndFilterBar
-          currFilterParam={filterParam}
-          currSortParam={sortParam}
-          handleFilterChange={handleFilterChange}
-          handleSortChange={handleSortChange}
-          triggerRerender={triggerRerender}
-        />
-        <TaskList
-          currFilterParam={filterParam}
-          currSortParam={sortParam}
-          triggerRerender={triggerRerender}
-          setAreTasksLoading={setAreTasksLoading}
-          areTasksLoading={areTasksLoading}
-          tasks={tasks}
-        />
-        {!isAuthenticated && <></>}
-        {isAuthenticated && <>authenticated tasks</>}
-      </div>
+    <div className="flex justify-center mt-10 w-full">
+      {isAuthContextLoading ? null : (
+        <div className="w-11/12 xs:w-3/4 md:w-2/3 lg:w-7/12 max-w-[700px]">
+          <Navbar />
+          <SearchAndOptionsBar
+            triggerRerender={triggerRerender}
+            setSearchTerm={setSearchTerm}
+          />
+          <SortAndFilterBar
+            currFilterParam={filterParam}
+            currSortParam={sortParam}
+            handleFilterChange={handleFilterChange}
+            handleSortChange={handleSortChange}
+            triggerRerender={triggerRerender}
+          />
+          <TaskList
+            currFilterParam={filterParam}
+            currSortParam={sortParam}
+            triggerRerender={triggerRerender}
+            setAreTasksLoading={setAreTasksLoading}
+            areTasksLoading={areTasksLoading}
+            tasks={tasks}
+            searchTerm={searchTerm}
+          />
+          {!isAuthenticated && <></>}
+          {isAuthenticated && <>authenticated tasks</>}
+        </div>
+      )}
     </div>
   );
 }
