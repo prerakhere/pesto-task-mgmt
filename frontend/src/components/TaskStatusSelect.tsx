@@ -14,12 +14,19 @@ import {
 } from "@radix-ui/react-icons";
 
 export default function TaskStatusSelect({
+  setModalStatus,
   status,
 }: {
+  setModalStatus: (modalStatus: "todo" | "inprogress" | "done") => void;
   status: "todo" | "inprogress" | "done";
 }) {
   return (
-    <Select.Root defaultValue={status.replace(/ /g, "").toLowerCase()}>
+    <Select.Root
+      defaultValue={status.replace(/ /g, "").toLowerCase()}
+      onValueChange={(value: "todo" | "inprogress" | "done") =>
+        setModalStatus(value)
+      }
+    >
       <Select.Trigger
         className="inline-flex items-center justify-center rounded-sm px-3 py-2 text-[13px] leading-none bg-white border border-gray-700 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
         aria-label="Status"
