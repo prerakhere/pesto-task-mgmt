@@ -1,6 +1,6 @@
 import User from "../response-contracts/IUser";
 
 export default interface IUserRepository {
-  getUserData(emailId: string): Promise<{ id: string; } | null>;
+  getUserId(emailId: string): Promise<{ id: string; } | null>;
   saveUser(emailId: string): Promise<boolean>;
 }

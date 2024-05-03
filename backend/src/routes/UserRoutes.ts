@@ -1,13 +1,13 @@
 import express from 'express';
 import {
-  getUserData,
+  getUserId,
   saveUser
 } from "../controllers/UserControllers";
 
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/', getUserData);
+router.get('/', getUserId);
 router.post('/', saveUser);
 
 export default router;

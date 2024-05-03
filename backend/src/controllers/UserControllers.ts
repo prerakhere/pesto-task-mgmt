@@ -6,20 +6,20 @@ import UserRepository from "../repositories/UserRepository";
 const userService = new UserService(new UserRepository());
 
 
-async function getUserData(req: Request, res: Response) {
+async function getUserId(req: Request, res: Response) {
   try {
     const { emailId } = req.query;
-    const userData = await userService.getUserData(emailId as string);
+    const userData = await userService.getUserId(emailId as string);
     res.json({ userData });
   } catch (e: any) {
-    console.log("getUserData ", e);
-    res.status(500).json({ error: '500 getUserData' });
+    console.log("getUserId ", e);
+    res.status(500).json({ error: '500 getUserId' });
   }
 }
 
 async function saveUser(req: Request, res: Response) {
   try {
-    const { emailId } = req.params;
+    const { emailId } = req.body;
     const isUserSaved = await userService.saveUser(emailId as string);
     if (!isUserSaved) throw new Error("user not saved");
     res.json({ message: "user saved" });
@@ -30,6 +30,6 @@ async function saveUser(req: Request, res: Response) {
 
 
 export {
-  getUserData,
+  getUserId,
   saveUser
 };
