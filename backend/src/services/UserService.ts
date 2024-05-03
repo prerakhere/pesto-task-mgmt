@@ -7,9 +7,9 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  async getUserData(emailId: string) {
+  async getUserId(emailId: string) {
     try {
-      const userData = await this.userRepository.getUserData(emailId);
+      const userData = await this.userRepository.getUserId(emailId);
       return userData;
     } catch (err) {
       throw err;
@@ -21,7 +21,8 @@ export default class UserService {
       const isUserSaved = await this.userRepository.saveUser(emailId);
       if (!isUserSaved) throw new Error("user not saved");
       return true;
-    } catch (err) {
+    } catch (err: any) {
+      console.log(err.message);
       return false;
     }
   }
