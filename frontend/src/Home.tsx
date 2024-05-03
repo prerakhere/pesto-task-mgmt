@@ -20,7 +20,7 @@ function Home() {
   const [error, setError] = useState("");
   const [trigger, setTrigger] = useState(false);
   const [areTasksLoading, setAreTasksLoading] = useState(true);
-  console.log("query...", queryParams);
+  // console.log("query...", queryParams);
 
   /**
    * 1. set received token in localstorage
@@ -29,6 +29,8 @@ function Home() {
 +
 3. get all tasks from db of that user id
    */
+
+  console.log("trigger...", trigger);
   let filterParam = queryParams.get("status") || "";
   let sortParam = queryParams.get("sortBy") || "";
   if (
@@ -53,7 +55,7 @@ function Home() {
 
     if (filterParam === "all") {
       searchParams.delete("status");
-      console.log("inside if block");
+      // console.log("inside if block");
     } else if (
       filterParam === "todo" ||
       filterParam === "inprogress" ||
@@ -86,43 +88,17 @@ function Home() {
     setTrigger((prev) => !prev);
   };
 
-  console.log("location...", location); // logs "?d=2&s=3"
+  // console.log("location...", location); // logs "?d=2&s=3"
   // console.log("navigate...", navigate); // logs
   // navigate("/ok");
   const isAuthenticated = false;
 
-  const { session, user, setUserId } = useAuth();
-  console.log("-------------auth context session-----------");
-  console.log(session);
+  const { userId } = useAuth();
+  console.log("--------userId---------- ", userId);
 
   useEffect(() => {
-    if (session) {
-      let userId = "";
-      const fetchUserId = async () => {
-        try {
-          setAreTasksLoading(true);
-          const response = await fetch(
-            `http://localhost:3000/api/user?emailId=${user?.email}`
-          );
-          if (!response.ok) {
-            throw new Error("unable to fetch userId");
-          }
-          const data = await response.json();
-          console.log("?????//  data with userId  ??????//");
-          console.log(data.userData.id);
-          userId = data.userData.id;
-          setUserId(data.userData.id);
-          fetchTasks();
-        } catch (err: any) {
-          if (err.message === "unable to fetch userId")
-            setError("Something went wrong!");
-          else {
-            console.log(err.message);
-            setError(err.message);
-          }
-        }
-      };
-      fetchUserId();
+    if (userId) {
+      setAreTasksLoading(true);
       const fetchTasks = async () => {
         try {
           const response = await fetch(
@@ -140,9 +116,11 @@ function Home() {
           console.log(err);
         }
       };
+
+      fetchTasks();
     }
-    if (!session) setTasks([]);
-  }, [session]);
+    if (!userId) setTasks([]);
+  }, [userId, trigger]);
 
   return (
     <div className="flex justify-center mt-10 border border-red-600 w-full">

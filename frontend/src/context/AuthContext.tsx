@@ -42,6 +42,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(false);
 
+  async function fetchUserId(emailId: string) {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/user?emailId=${emailId}`
+      );
+      if (!response.ok) {
+        throw new Error("unable to fetch userId");
+      }
+      const data = await response.json();
+      console.log("?????//  data with userId  ??????//");
+      console.log(data.userData.id);
+      // userId = data.userData.id;
+      setUserId(data.userData.id);
+    } catch (err: any) {
+      console.log(err.message);
+      // setError(err.message);
+    }
+  }
+
   useEffect(() => {
     const setSessionData = async function () {
       const {
@@ -50,7 +69,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } = await supabase.auth.getSession();
       if (error) throw new Error("");
       setSession(session);
-      if (session) setUser(session.user);
+      if (session) {
+        setUser(session.user);
+        await fetchUserId(session.user.email!);
+      }
       setLoading(false);
 
       const { data: listener } = supabase.auth.onAuthStateChange(
