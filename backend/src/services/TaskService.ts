@@ -38,8 +38,8 @@ export default class TaskService {
 
   async updateTask(taskId: string, taskToBeUpdated: Task) {
     try {
-      const updatedTask = this.taskRepository.updateTask(taskId, taskToBeUpdated);
-      return updatedTask;
+      const isTaskUpdated = this.taskRepository.updateTask(taskId, taskToBeUpdated);
+      return isTaskUpdated;
     } catch (err) {
       throw err;
     }

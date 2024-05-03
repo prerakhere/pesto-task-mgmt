@@ -78,21 +78,20 @@ export default class TaskRepository implements ITaskRepository {
 
   async updateTask(taskId: string, taskToBeUpdated: Task): Promise<boolean> {
     try {
-      const { data, error } = await supabase.from('task').update({
+      const selectRes = await supabase.from('task').select('id').eq('id', taskId);
+      if (selectRes.data?.length === 0) {
+        throw new Error("task with this id does not exist");
+      }
+      const { error, status, count, data, statusText } = await supabase.from('task').update({
         title: taskToBeUpdated.title,
         description: taskToBeUpdated.description,
         status: taskToBeUpdated.status
-      })
-        .eq('id', taskId)
-        .select();
-      console.log("---------- error ", error);
+      }).eq('id', taskId);
       if (error) throw new Error("updateTask: can't update task");
-      console.log("------------data");
-      console.log(data);
-      return data[0];
-    } catch (err) {
-      console.log("updateTask repository ", err);
-      throw err;
+      return true;
+    } catch (err: any) {
+      console.log("updateTask repository ", err.message);
+      return false;
     }
   }
 
