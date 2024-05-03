@@ -5,8 +5,10 @@ import { useState } from "react";
 
 export default function SearchAndOptionsBar({
   triggerRerender,
+  setSearchTerm,
 }: {
   triggerRerender: () => void;
+  setSearchTerm: (searchTerm: string) => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -16,6 +18,7 @@ export default function SearchAndOptionsBar({
           type="text"
           placeholder="Search tasks..."
           className="py-[5px] px-2 rounded border-[0.1rem] border-gray-300 focus:outline-none focus:border-violet-800 text-sm w-full max-w-[300px] md:max-w-[350px]"
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
       <div className="w-1/3 sm:w-1/4 flex justify-end">

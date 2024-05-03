@@ -45,6 +45,7 @@ export default function TaskList({
   currFilterParam,
   currSortParam,
   tasks,
+  searchTerm,
   triggerRerender,
   areTasksLoading,
   setAreTasksLoading,
@@ -52,6 +53,7 @@ export default function TaskList({
   currFilterParam: string;
   currSortParam: string;
   tasks: ITask[];
+  searchTerm: string;
   triggerRerender: () => void;
   areTasksLoading: boolean;
   setAreTasksLoading: (loading: boolean) => void;
@@ -71,18 +73,25 @@ export default function TaskList({
     filteredTasks.sort((t1, t2) => t1.created_at - t2.created_at);
   console.log(filteredTasks);
 
+  const finalTasks = filteredTasks.filter((task) => {
+    return (
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
   return (
     <main className="w-full mt-8">
-      <div className="border border-red-400">
+      <div className="">
         {areTasksLoading ? (
           "loading"
         ) : (
           <>
-            {!filteredTasks.length && (
+            {!finalTasks.length && (
               <p className="mt-12 text-center text-gray-500">No tasks</p>
             )}
-            {filteredTasks.length > 0 &&
-              filteredTasks.map(
+            {finalTasks.length > 0 &&
+              finalTasks.map(
                 (task: {
                   id: number;
                   title: string;
