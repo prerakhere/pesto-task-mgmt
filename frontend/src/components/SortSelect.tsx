@@ -21,7 +21,7 @@ export default function SortSelect({
         onValueChange={(value) => handleSortChange(value)}
       >
         <Select.Trigger
-          className="inline-flex items-center justify-center rounded-sm  py-1.5 pr-1.5 text-[13px] leading-none bg-white border border-gray-400 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
+          className="inline-flex items-center justify-center rounded-full  py-1.5 pr-2 pl-0.5 text-xs leading-none bg-white border border-gray-400 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
           aria-label="Sort By"
         >
           <Select.Value />

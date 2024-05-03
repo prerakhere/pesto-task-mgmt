@@ -21,7 +21,7 @@ export default function FilterSelect({
         onValueChange={(value) => handleFilterChange(value)}
       >
         <Select.Trigger
-          className="inline-flex items-center justify-between rounded py-1.5 px-2 text-[13px] leading-none bg-white border border-gray-400 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
+          className="inline-flex items-center justify-between rounded-full py-1.5 px-2 text-xs leading-none bg-white border border-gray-400 focus:border-black focus:outline-none focus:bg-violet-100 ring-0 focus:ring-0 hover:bg-violet-100  focus:shadow-black outline-none"
           aria-label="Status Filter"
         >
           <Select.Value />
@@ -58,7 +58,7 @@ export default function FilterSelect({
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
-                    <div className="h-[6.5px] w-[6.5px] rounded-full bg-red-600 inline-block"></div>
+                    <div className="h-[6.5px] w-[6.5px] rounded-full bg-red-600 inline-block mb-[1px]"></div>
                     <span className="ml-1.5">To Do</span>
                   </Select.ItemText>
                   <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center">
@@ -70,7 +70,7 @@ export default function FilterSelect({
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
-                    <div className="h-[6.5px] w-[6.5px] rounded-full bg-orange-400 inline-block"></div>
+                    <div className="h-[6.5px] w-[6.5px] rounded-full bg-orange-400 inline-block mb-[1px]"></div>
                     <span className="ml-1.5">In Progress</span>
                   </Select.ItemText>
                   <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center">
@@ -82,7 +82,7 @@ export default function FilterSelect({
                   className="text-[13px] leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
                 >
                   <Select.ItemText className="flex">
-                    <div className="h-[6.5px] w-[6.5px] rounded-full bg-green-600 inline-block"></div>
+                    <div className="h-[6.5px] w-[6.5px] rounded-full bg-green-600 inline-block mb-[1px]"></div>
                     <span className="ml-1.5">Done</span>
                   </Select.ItemText>
                   <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center">

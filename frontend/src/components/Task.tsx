@@ -34,9 +34,9 @@ export default function Task({
             console.log("clicked");
           }}
         >
-          <div className="flex flex-col w-5/6 border">
+          <div className="flex flex-col w-2/3 sm:w-3/4">
             <div className="w-fit">
-              <h1 className="hover:underline">{title}</h1>
+              <h1 className="hover:underline font-medium">{title}</h1>
             </div>
             <div className="mt-2 text-sub-sm">{description}</div>
           </div>
