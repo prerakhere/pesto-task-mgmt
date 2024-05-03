@@ -4,6 +4,7 @@ import { supabase } from "../../config/auth-config";
 import { useAuth } from "../context/AuthContext";
 import { isEmailInvalid, isPasswordInvalid } from "../utils/AuthUtils";
 import TextFieldError from "../components/TextFieldError";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,17 +13,19 @@ export default function Login() {
     emailErr: "",
     pwErr: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState("");
   const authData = useAuth();
   const navigate = useNavigate();
 
-  const { session, loading, setUserId, signIn } = authData;
+  const { session, isAuthContextLoading, setUserId, signIn } = authData;
 
   useEffect(() => {
-    if (session && !loading) navigate("/");
-  }, [session, loading]);
+    if (session && !isAuthContextLoading) navigate("/");
+  }, [session, isAuthContextLoading]);
 
   async function handleLogin() {
+    setIsLoading(true);
     setServerError("");
     setFieldErrors({
       emailErr: "",
@@ -42,6 +45,7 @@ export default function Login() {
           ...err,
           pwErr,
         }));
+      setIsLoading(false);
       return;
     }
     try {
@@ -49,7 +53,7 @@ export default function Login() {
       if (error) console.log("-------------auth server error----------");
       if (error) console.log(error.message);
       if (error) throw new Error(error.message);
-
+      setIsLoading(false);
       // get user id
       // const response = await fetch(
       //   `https://d12hukpp1zen6s.cloudfront.net/api/user?email=${email}`
@@ -59,6 +63,7 @@ export default function Login() {
       if (err.message === "Invalid login credentials")
         setServerError("Incorrect email or password!");
       else setServerError("Something went wrong");
+      setIsLoading(false);
     }
   }
 
@@ -67,7 +72,7 @@ export default function Login() {
    */
   return (
     <>
-      {loading && <p>loading...</p>}
+      {isAuthContextLoading && <p>loading...</p>}
       {/* {!authData.session && ( */}
       <div className="flex items-center justify-center mt-20 border w-full">
         <div className="border px-16 py-14 w-5/6 max-w-[400px]">
@@ -117,11 +122,12 @@ export default function Login() {
           <div className="flex items-center justify-center mt-7">
             <button
               type="submit"
-              disabled={loading}
+              // disabled={!isLoading}
               onClick={handleLogin}
-              className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
+              className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-1.5 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
             >
-              Login
+              <span className="mr-2">Login</span>
+              {!isLoading && <LoadingSpinner variant="button" color="light" />}
             </button>
           </div>
           <div className="flex justify-center mt-1.5">

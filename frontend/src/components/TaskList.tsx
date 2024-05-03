@@ -1,3 +1,4 @@
+import LoadingSpinner from "./LoadingSpinner";
 import Task from "./Task";
 
 type statusType = "todo" | "inprogress" | "done";
@@ -83,8 +84,13 @@ export default function TaskList({
   return (
     <main className="w-full mt-8">
       <div className="">
-        {areTasksLoading ? (
-          "loading"
+        {!areTasksLoading ? (
+          <div className="mt-24 text-center">
+            <LoadingSpinner variant="large" color="dark" />
+            <p className="text-xs text-gray-400 italic text-center">
+              loading tasks...
+            </p>
+          </div>
         ) : (
           <>
             {!finalTasks.length && (

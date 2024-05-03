@@ -4,6 +4,7 @@ import { supabase } from "../../config/auth-config";
 import { useAuth } from "../context/AuthContext";
 import { isEmailInvalid, isPasswordInvalid } from "../utils/AuthUtils";
 import TextFieldError from "../components/TextFieldError";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ export default function Signup() {
     emailErr: "",
     pwErr: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState("");
 
   const authData = useAuth();
@@ -112,10 +114,14 @@ export default function Signup() {
             <div className="flex items-center justify-center mt-7">
               <button
                 type="submit"
+                disabled={!isLoading}
                 onClick={handleSignup}
                 className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
               >
-                Sign Up
+                <span className="mr-2">Sign Up</span>
+                {!isLoading && (
+                  <LoadingSpinner variant="button" color="light" />
+                )}
               </button>
             </div>
             <div className="flex justify-center mt-1.5">
