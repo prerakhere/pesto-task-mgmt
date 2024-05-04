@@ -1,7 +1,7 @@
 import supabase from "../../config/db-config";
 import Task from "./response-contracts/ITask";
 import ITaskRepository from "./interfaces/ITaskRepository";
-import BaseError from "../ErrorHandler";
+import BaseError from "../utils/ErrorHandler";
 
 
 export default class TaskRepository implements ITaskRepository {

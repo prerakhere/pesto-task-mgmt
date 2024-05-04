@@ -1,7 +1,7 @@
 import supabase from "../../config/db-config";
 import IUser from "./response-contracts/IUser";
 import IUserRepository from "./interfaces/IUserRepository";
-import BaseError from "../ErrorHandler";
+import BaseError from "../utils/ErrorHandler";
 
 
 export default class UserRepository implements IUserRepository {

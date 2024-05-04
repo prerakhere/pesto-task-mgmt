@@ -2,7 +2,8 @@ import express, { NextFunction, Request, Response } from "express";
 import taskRoutes from './routes/TaskRoutes';
 import userRoutes from './routes/UserRoutes';
 import cors from 'cors';
-import BaseError from "./ErrorHandler";
+import errorLogger from "./middlewares/errors/ErrorLogger";
+import errorResponder from "./middlewares/errors/ErrorResponder";
 // import dotenv from 'dotenv';
 
 // dotenv.config();
@@ -23,17 +24,6 @@ app.get('/health', (req, res) => {
 app.use('/api/user', userRoutes);
 app.use('/api/:userId', taskRoutes);
 
-
-const errorLogger = (err: BaseError, request: Request, response: Response, next: NextFunction) => {
-  console.log(`errorLogger: ${err.message}`);
-  next(err);
-};
-
-const errorResponder = (err: BaseError, request: Request, response: Response, next: NextFunction) => {
-  response.status(err.httpStatusCode || 500).json({
-    error: err.message || 'Internal Server Error'
-  });
-};
 
 app.use(errorLogger);
 app.use(errorResponder);
