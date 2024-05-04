@@ -1,38 +1,8 @@
+import { useEffect } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import Task from "./Task";
 
 type statusType = "todo" | "inprogress" | "done";
-
-const dummyTasks: {
-  id: number;
-  title: string;
-  description: string;
-  status: statusType;
-  // statusCode?: string;
-  created_at: Date;
-}[] = [
-  {
-    id: 1,
-    title: "Do frontend of task management app.",
-    description: "some description 1",
-    status: "todo",
-    created_at: new Date(),
-  },
-  {
-    id: 2,
-    title: "Do backend of task management app.",
-    description: "some description 2",
-    status: "inprogress",
-    created_at: new Date(),
-  },
-  {
-    id: 3,
-    title: "Do infra of task management app.",
-    description: "some description 3",
-    status: "done",
-    created_at: new Date(),
-  },
-];
 
 interface ITask {
   id: number;
@@ -81,10 +51,18 @@ export default function TaskList({
     );
   });
 
+  useEffect(() => {
+    if (tasks.length) {
+      setTimeout(() => {
+        setAreTasksLoading(false);
+      }, 0);
+    }
+  }, [tasks]);
+
   return (
     <main className="w-full mt-8">
       <div className="">
-        {!areTasksLoading ? (
+        {areTasksLoading ? (
           <div className="mt-24 text-center">
             <LoadingSpinner variant="large" color="dark" />
             <p className="text-xs text-gray-400 italic text-center">

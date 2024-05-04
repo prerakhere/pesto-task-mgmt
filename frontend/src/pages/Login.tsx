@@ -122,12 +122,12 @@ export default function Login() {
           <div className="flex items-center justify-center mt-7">
             <button
               type="submit"
-              // disabled={!isLoading}
+              disabled={isLoading}
               onClick={handleLogin}
               className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-1.5 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
             >
               <span className="mr-2">Login</span>
-              {!isLoading && <LoadingSpinner variant="button" color="light" />}
+              {isLoading && <LoadingSpinner variant="button" color="light" />}
             </button>
           </div>
           <div className="flex justify-center mt-1.5">

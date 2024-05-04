@@ -17,7 +17,7 @@ export default function AccountMenu() {
           <Menubar.Trigger className="MenubarTrigger">
             <Avatar.Root className="inline-flex items-center justify-center align-middle overflow-hidden select-none w-9 h-9 rounded-full border border-violet-700 text-violet-800 hover:bg-violet-100">
               <Avatar.Fallback className="h-full w-full flex items-center justify-center ">
-                PD
+                {user?.email![0].toUpperCase()}
               </Avatar.Fallback>
             </Avatar.Root>
           </Menubar.Trigger>
