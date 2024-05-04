@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import TaskRepository from "../repositories/TaskRepository";
 import TaskService from "../services/TaskService";
 import BaseError from "../utils/ErrorHandler";
-import { taskValidator } from "../utils/PayloadValidators";
+import { taskValidator, tasksValidator } from "../utils/PayloadValidators";
 
 const taskService = new TaskService(new TaskRepository());
 
@@ -61,6 +61,25 @@ async function createTask(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+async function createTasks(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req.params;
+    if (!userId) throw new BaseError(400, "no userId provided");
+    const { error } = tasksValidator(req.body);
+    if (error) throw new BaseError(400, "invalid task payload");
+    const tasks = req.body;
+    // const taskParams = {
+    //   title: title,
+    //   description: description,
+    //   status: status
+    // };
+    await taskService.createTasks(userId, tasks);
+    res.json({ message: 'tasks created' });
+  } catch (err) {
+    next(err);
+  }
+}
+
 
 async function updateTask(req: Request, res: Response, next: NextFunction) {
   try {
@@ -98,6 +117,7 @@ export {
   getAllTasks,
   getTask,
   createTask,
+  createTasks,
   updateTask,
   deleteTask
 };

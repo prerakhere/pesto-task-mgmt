@@ -44,6 +44,21 @@ export default class TaskRepository implements ITaskRepository {
     }
   }
 
+  async createTasks(userId: string, tasks: Task[]) {
+    try {
+      const tasksWithUserId = tasks.map((task) => {
+        return {
+          user_id: userId,
+          ...task
+        };
+      });
+      const { error } = await supabase.from('task').insert(tasksWithUserId);
+      if (error) throw new BaseError(500, "createTask repository: can't create task");
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async updateTask(taskId: string, taskToBeUpdated: Task) {
     try {
       const selectRes = await supabase.from('task').select('id').eq('id', taskId);

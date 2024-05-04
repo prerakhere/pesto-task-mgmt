@@ -33,6 +33,14 @@ export default class TaskService {
     }
   }
 
+  async createTasks(userId: string, tasks: Task[]) {
+    try {
+      await this.taskRepository.createTasks(userId, tasks);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async updateTask(taskId: string, taskToBeUpdated: Task) {
     try {
       return await this.taskRepository.updateTask(taskId, taskToBeUpdated);
