@@ -9,7 +9,7 @@ export default function LoadingSpinner({
   color: string;
 }) {
   return (
-    <div className="inline-block align-middle mb-0.5">
+    <div className="inline-block align-middle mb-0.5 ml-2">
       <div className="">
         {variant === "large" && (
           <div className="sp-circle w-6 h-6 clear-both my-1.5 mx-auto border-4 border-gray-400 border-t-4 border-t-black"></div>

@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { isEmailInvalid, isPasswordInvalid } from "../utils/AuthUtils";
 import TextFieldError from "../components/TextFieldError";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export default function Login() {
   const authData = useAuth();
   const navigate = useNavigate();
 
-  const { session, isAuthContextLoading, setUserId, signIn } = authData;
+  const { session, isAuthContextLoading, signIn } = authData;
 
   useEffect(() => {
     if (session && !isAuthContextLoading) navigate("/");
@@ -54,15 +55,10 @@ export default function Login() {
       if (error) console.log(error.message);
       if (error) throw new Error(error.message);
       setIsLoading(false);
-      // get user id
-      // const response = await fetch(
-      //   `https://d12hukpp1zen6s.cloudfront.net/api/user?email=${email}`
-      // );
     } catch (err: any) {
-      // console.log(err)
       if (err.message === "Invalid login credentials")
         setServerError("Incorrect email or password!");
-      else setServerError("Something went wrong");
+      else toast.error("Something went wrong!");
       setIsLoading(false);
     }
   }
@@ -72,78 +68,77 @@ export default function Login() {
    */
   return (
     <>
-      {isAuthContextLoading && <p>loading...</p>}
-      {/* {!authData.session && ( */}
-      <div className="flex items-center justify-center mt-20 border w-full">
-        <div className="border px-16 py-14 w-5/6 max-w-[400px]">
-          <div className="">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-1.5"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800 text-sub-base -mb-[3px]"
-              placeholder="Enter email"
-              required
-            />
-            <TextFieldError error={fieldErrors.emailErr} />
-          </div>
-          <div className="mt-5">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-1.5"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800 text-sub-base -mb-[3px]"
-              placeholder="Enter password"
-              required
-            />
-            <TextFieldError error={fieldErrors.pwErr} />
-          </div>
-          {serverError && (
-            <div className="flex justify-center items-center mt-5">
-              <span className="text-over-xs max-w-fit py-1.5 px-4 rounded-sm text-red-700 border border-red-600 bg-red-100">
-                {serverError}
-              </span>
-            </div>
-          )}
-          <div className="flex items-center justify-center mt-7">
-            <button
-              type="submit"
-              disabled={isLoading}
-              onClick={handleLogin}
-              className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-1.5 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
-            >
-              <span className="mr-2">Login</span>
-              {isLoading && <LoadingSpinner variant="button" color="light" />}
-            </button>
-          </div>
-          <div className="flex justify-center mt-1.5">
-            <p className="text-over-xs">
-              New user?{" "}
-              <Link
-                to={"/signup"}
-                className="cursor-pointer underline text-violet-700 hover:text-black"
+      {!authData.session && (
+        <div className="flex items-center justify-center mt-20 border w-full">
+          <div className="border px-16 py-14 w-5/6 max-w-[400px]">
+            <div className="">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-1.5"
+                htmlFor="email"
               >
-                Sign Up
-              </Link>
-            </p>
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800 text-sub-base -mb-[3px]"
+                placeholder="Enter email"
+                required
+              />
+              <TextFieldError error={fieldErrors.emailErr} />
+            </div>
+            <div className="mt-5">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-1.5"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-violet-800 text-sub-base -mb-[3px]"
+                placeholder="Enter password"
+                required
+              />
+              <TextFieldError error={fieldErrors.pwErr} />
+            </div>
+            {serverError && (
+              <div className="flex justify-center items-center mt-5">
+                <span className="text-over-xs max-w-fit py-1.5 px-4 rounded-sm text-red-700 border border-red-600 bg-red-100">
+                  {serverError}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center justify-center mt-7">
+              <button
+                type="submit"
+                disabled={isLoading}
+                onClick={handleLogin}
+                className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-1.5 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
+              >
+                <span className="">Login</span>
+                {isLoading && <LoadingSpinner variant="button" color="light" />}
+              </button>
+            </div>
+            <div className="flex justify-center mt-1.5">
+              <p className="text-over-xs">
+                New user?{" "}
+                <Link
+                  to={"/signup"}
+                  className="cursor-pointer underline text-violet-700 hover:text-black"
+                >
+                  Sign Up
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      {/* )} */}
+      )}
     </>
   );
 }

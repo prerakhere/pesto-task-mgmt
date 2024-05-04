@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { isTaskDescInvalid, isTaskNameInvalid } from "../utils/TaskUtils";
 import TextFieldError from "./TextFieldError";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface ITaskModalProps {
   id: number;
@@ -36,14 +37,6 @@ const TaskModal = ({
   });
 
   const { userId } = useAuth();
-
-  // useEffect(() => {
-  //   if (id === 0) {
-  //     setModalTitle("");
-  //     setModalDesc("");
-  //     setModalStatus("todo");
-  //   }
-  // }, []);
 
   function resetModalState() {
     setModalTitle("");
@@ -248,9 +241,13 @@ const TaskModal = ({
                 </button>
                 <button
                   className="bg-violet-700 text-white border border-violet-700 focus:shadow-none items-center justify-center rounded-sm py-3 w-[90px] text-sm font-medium leading-none focus:outline-none ml-4"
+                  disabled={isLoading}
                   onClick={handleTaskSave}
                 >
-                  Save
+                  <span className="">Save</span>
+                  {isLoading && (
+                    <LoadingSpinner variant="button" color="light" />
+                  )}
                 </button>
               </div>
             </Dialog.Close>

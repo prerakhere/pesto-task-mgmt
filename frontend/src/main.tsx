@@ -7,6 +7,8 @@ import "./index.css";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -17,6 +19,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={4000}
+          theme="colored"
+        />
       </AuthProvider>
     </Router>
   </React.StrictMode>

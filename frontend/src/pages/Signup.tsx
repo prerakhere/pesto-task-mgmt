@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { isEmailInvalid, isPasswordInvalid } from "../utils/AuthUtils";
 import TextFieldError from "../components/TextFieldError";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { toast } from "react-toastify";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -22,10 +23,11 @@ export default function Signup() {
   const { session, isAuthContextLoading, signUp } = authData;
 
   useEffect(() => {
-    if (session) navigate("/");
-  }, [session]);
+    if (session && !isAuthContextLoading) navigate("/");
+  }, [session, isAuthContextLoading]);
 
   async function handleSignup() {
+    setIsLoading(true);
     setServerError("");
     setFieldErrors({
       emailErr: "",
@@ -45,6 +47,7 @@ export default function Signup() {
           ...err,
           pwErr,
         }));
+      setIsLoading(false);
       return;
     }
 
@@ -58,13 +61,13 @@ export default function Signup() {
       // console.log(err)
       if (err.message === "Invalid login credentials")
         setServerError("Incorrect email or password!");
-      else setServerError(err.message);
+      else toast.error("Something went wrong!");
+      setIsLoading(false);
     }
   }
 
   return (
     <>
-      {isAuthContextLoading && <p>loading...</p>}
       {!authData.session && (
         <div className="flex items-center justify-center mt-20 border w-full">
           <div className="border px-16 py-14 w-5/6 max-w-[400px]">
@@ -114,14 +117,12 @@ export default function Signup() {
             <div className="flex items-center justify-center mt-7">
               <button
                 type="submit"
-                disabled={!isLoading}
+                disabled={isLoading}
                 onClick={handleSignup}
-                className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
+                className="bg-violet-700 hover:bg-violet-800 text-white font-semibold py-1.5 px-4 rounded focus:outline-none focus:shadow-outline w-1/2 max-w-[120px]"
               >
-                <span className="mr-2">Sign Up</span>
-                {!isLoading && (
-                  <LoadingSpinner variant="button" color="light" />
-                )}
+                <span className="">Sign Up</span>
+                {isLoading && <LoadingSpinner variant="button" color="light" />}
               </button>
             </div>
             <div className="flex justify-center mt-1.5">
