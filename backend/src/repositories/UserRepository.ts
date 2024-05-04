@@ -9,7 +9,7 @@ export default class UserRepository implements IUserRepository {
     try {
       const { error, data } = await supabase.from('user').select('id').eq('email', email);
       if (error) throw new BaseError(500, "getUserId repository: can't fetch user id");
-      if (data.length && data[0].id) return { id: data[0].id };
+      if (data.length && data[0].id) return data[0].id;
       return null;
     } catch (err) {
       throw err;
