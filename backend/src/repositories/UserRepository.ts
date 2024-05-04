@@ -5,9 +5,9 @@ import BaseError from "../utils/ErrorHandler";
 
 
 export default class UserRepository implements IUserRepository {
-  async getUserId(emailId: string) {
+  async getUserId(email: string) {
     try {
-      const { error, data } = await supabase.from('user').select('id').eq('email', emailId);
+      const { error, data } = await supabase.from('user').select('id').eq('email', email);
       if (error) throw new BaseError(500, "getUserId repository: can't fetch user id");
       if (data.length && data[0].id) return { id: data[0].id };
       return null;
@@ -16,10 +16,10 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async saveUser(emailId: string) {
+  async saveUser(email: string) {
     try {
       const { status, error } = await supabase.from('user').insert({
-        email: emailId
+        email
       });
       if (error || status !== 201) {
         throw new BaseError(500, "saveUser repository: can't save user");

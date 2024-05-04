@@ -7,17 +7,17 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  async getUserId(emailId: string) {
+  async getUserId(email: string) {
     try {
-      return await this.userRepository.getUserId(emailId);
+      return await this.userRepository.getUserId(email);
     } catch (err) {
       throw err;
     }
   }
 
-  async saveUser(emailId: string) {
+  async saveUser(email: string) {
     try {
-      await this.userRepository.saveUser(emailId);
+      await this.userRepository.saveUser(email);
     } catch (err) {
       throw err;
     }

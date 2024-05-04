@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import TaskRepository from "../repositories/TaskRepository";
 import TaskService from "../services/TaskService";
+import BaseError from "../utils/ErrorHandler";
+import { taskValidator } from "../utils/PayloadValidators";
 
 const taskService = new TaskService(new TaskRepository());
 
@@ -8,6 +10,7 @@ const taskService = new TaskService(new TaskRepository());
 async function getAllTasks(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req.params;
+    if (!userId) throw new BaseError(400, "no userId provided");
     const allTasks = await taskService.getAllTasks(userId);
 
     // 4/27/2024, 4:55:22 PM
@@ -30,6 +33,7 @@ async function getAllTasks(req: Request, res: Response, next: NextFunction) {
 async function getTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { taskId } = req.params;
+    if (!taskId) throw new BaseError(400, "no taskId provided");
     const task = await taskService.getTaskById(taskId);
     res.json({ task });
   } catch (err) {
@@ -41,6 +45,9 @@ async function getTask(req: Request, res: Response, next: NextFunction) {
 async function createTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req.params;
+    if (!userId) throw new BaseError(400, "no userId provided");
+    const { error } = taskValidator(req.body);
+    if (error) throw new BaseError(400, "invalid task payload");
     const { title, description, status } = req.body;
     const taskParams = {
       title: title,
@@ -58,6 +65,9 @@ async function createTask(req: Request, res: Response, next: NextFunction) {
 async function updateTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { taskId } = req.params;
+    if (!taskId) throw new BaseError(400, "no taskId provided");
+    const { error } = taskValidator(req.body);
+    if (error) throw new BaseError(400, "invalid task payload");
     const { title, description, status } = req.body;
     const taskParams = {
       title: title,
@@ -75,6 +85,7 @@ async function updateTask(req: Request, res: Response, next: NextFunction) {
 async function deleteTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { taskId } = req.params;
+    if (!taskId) throw new BaseError(400, "no taskId provided");
     await taskService.deleteTask(taskId);
     res.json({ message: 'task deleted' });
   } catch (err) {
