@@ -9,8 +9,7 @@ export default class UserService {
 
   async getUserId(emailId: string) {
     try {
-      const userData = await this.userRepository.getUserId(emailId);
-      return userData;
+      return await this.userRepository.getUserId(emailId);
     } catch (err) {
       throw err;
     }
@@ -18,12 +17,9 @@ export default class UserService {
 
   async saveUser(emailId: string) {
     try {
-      const isUserSaved = await this.userRepository.saveUser(emailId);
-      if (!isUserSaved) throw new Error("user not saved");
-      return true;
-    } catch (err: any) {
-      console.log(err.message);
-      return false;
+      await this.userRepository.saveUser(emailId);
+    } catch (err) {
+      throw err;
     }
   }
 

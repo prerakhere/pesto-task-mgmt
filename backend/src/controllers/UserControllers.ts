@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import UserService from "../services/UserService";
 import UserRepository from "../repositories/UserRepository";
 
@@ -6,25 +6,23 @@ import UserRepository from "../repositories/UserRepository";
 const userService = new UserService(new UserRepository());
 
 
-async function getUserId(req: Request, res: Response) {
+async function getUserId(req: Request, res: Response, next: NextFunction) {
   try {
     const { emailId } = req.query;
-    const userData = await userService.getUserId(emailId as string);
-    res.json({ userData });
-  } catch (e: any) {
-    console.log("getUserId ", e);
-    res.status(500).json({ error: '500 getUserId' });
+    const userId = await userService.getUserId(emailId as string);
+    res.json({ userId });
+  } catch (err) {
+    next(err);
   }
 }
 
-async function saveUser(req: Request, res: Response) {
+async function saveUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { emailId } = req.body;
-    const isUserSaved = await userService.saveUser(emailId as string);
-    if (!isUserSaved) throw new Error("user not saved");
+    await userService.saveUser(emailId as string);
     res.json({ message: "user saved" });
   } catch (err) {
-    res.status(500).json({ error: "500 saveUser" });
+    next(err);
   }
 }
 

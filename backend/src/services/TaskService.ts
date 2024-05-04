@@ -11,8 +11,7 @@ export default class TaskService {
 
   async getAllTasks(userId: string) {
     try {
-      const allTasks = await this.taskRepository.getAllTasks(userId);
-      return allTasks;
+      return await this.taskRepository.getAllTasks(userId);
     } catch (err) {
       throw err;
     }
@@ -20,8 +19,7 @@ export default class TaskService {
 
   async getTaskById(taskId: string) {
     try {
-      const task = await this.taskRepository.getTaskById(taskId);
-      return task;
+      return await this.taskRepository.getTaskById(taskId);
     } catch (err) {
       throw err;
     }
@@ -29,8 +27,7 @@ export default class TaskService {
 
   async createTask(userId: string, newTask: Task) {
     try {
-      const createdTask = this.taskRepository.createTask(userId, newTask);
-      return createdTask;
+      return await this.taskRepository.createTask(userId, newTask);
     } catch (err) {
       throw err;
     }
@@ -38,8 +35,7 @@ export default class TaskService {
 
   async updateTask(taskId: string, taskToBeUpdated: Task) {
     try {
-      const isTaskUpdated = this.taskRepository.updateTask(taskId, taskToBeUpdated);
-      return isTaskUpdated;
+      return await this.taskRepository.updateTask(taskId, taskToBeUpdated);
     } catch (err) {
       throw err;
     }
@@ -47,8 +43,7 @@ export default class TaskService {
 
   async deleteTask(taskId: string) {
     try {
-      const deletedTask = this.taskRepository.deleteTask(taskId);
-      return deletedTask;
+      await this.taskRepository.deleteTask(taskId);
     } catch (err) {
       throw err;
     }

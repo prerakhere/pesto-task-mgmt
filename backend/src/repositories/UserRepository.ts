@@ -1,19 +1,17 @@
 import supabase from "../../config/db-config";
 import IUser from "./response-contracts/IUser";
 import IUserRepository from "./interfaces/IUserRepository";
+import BaseError from "../ErrorHandler";
 
 
 export default class UserRepository implements IUserRepository {
   async getUserId(emailId: string) {
     try {
       const { error, data } = await supabase.from('user').select('id').eq('email', emailId);
-      console.log("------------- user data / id -------------");
-      console.log(data);
-      if (error) throw new Error("getUserId: can't fetch user data");
+      if (error) throw new BaseError(500, "getUserId repository: can't fetch user id");
       if (data.length && data[0].id) return { id: data[0].id };
       return null;
-    } catch (err: any) {
-      console.log("getUserId repository ", err);
+    } catch (err) {
       throw err;
     }
   }
@@ -23,16 +21,11 @@ export default class UserRepository implements IUserRepository {
       const { status, error } = await supabase.from('user').insert({
         email: emailId
       });
-      console.log(status);
-      console.log(error);
-      if (status === 201) return true;
       if (error || status !== 201) {
-        throw new Error("saveUser repository");
+        throw new BaseError(500, "saveUser repository: can't save user");
       }
-      return false;
     } catch (err: any) {
-      console.log(err.message);
-      return false;
+      throw err;
     }
   }
 }

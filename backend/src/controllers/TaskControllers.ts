@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import TaskRepository from "../repositories/TaskRepository";
 import TaskService from "../services/TaskService";
 
 const taskService = new TaskService(new TaskRepository());
 
 
-async function getAllTasks(req: Request, res: Response) {
+async function getAllTasks(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req.params;
     const allTasks = await taskService.getAllTasks(userId);
@@ -21,77 +21,64 @@ async function getAllTasks(req: Request, res: Response) {
       task.created_at = new Date(Date.parse(task.created_at));
     });
     allTasks.sort((t1, t2) => t2.created_at - t1.created_at);
-    // console.log(allTasks);
     res.json({ allTasks });
-  } catch (e: any) {
-    console.log("getAllTasks ", e);
-    res.status(500).json({ error: '500 getAllTasks' });
+  } catch (err) {
+    next(err);
   }
 }
 
-async function getTask(req: Request, res: Response) {
+async function getTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { taskId } = req.params;
     const task = await taskService.getTaskById(taskId);
     res.json({ task });
-  } catch (e: any) {
-    console.log("getTask ", e);
-    res.status(500).json({ error: '500 getTask' });
+  } catch (err) {
+    next(err);
   }
 }
 
 
-async function createTask(req: Request, res: Response) {
+async function createTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req.params;
-    const { title, description, status, dueDate = null } = req.body;
+    const { title, description, status } = req.body;
     const taskParams = {
       title: title,
       description: description,
-      status: status,
-      // dueDate: dueDate
+      status: status
     };
-    const isTaskCreated = await taskService.createTask(userId, taskParams);
-    if (!isTaskCreated) throw new Error("500 task not created: createTask controller");
-    res.json({ message: 'Task created' });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: '500 createTask' });
+    const createdTask = await taskService.createTask(userId, taskParams);
+    res.json({ message: 'task created', createdTask });
+  } catch (err) {
+    next(err);
   }
 }
 
 
-async function updateTask(req: Request, res: Response) {
+async function updateTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { taskId } = req.params;
-    const { title, description, status, dueDate = null } = req.body;
+    const { title, description, status } = req.body;
     const taskParams = {
       title: title,
       description: description,
-      status: status,
-      // dueDate: dueDate
+      status: status
     };
-    const isTaskUpdated = await taskService.updateTask(taskId, taskParams);
-    if (!isTaskUpdated) {
-      throw new Error("task update failed");
-    }
-    res.json({ message: 'task updated' });
-  } catch (e) {
-    console.log("updateTaskItems ", e);
-    res.status(500).json({ error: '500 updateTask' });
+    const updatedTask = await taskService.updateTask(taskId, taskParams);
+    res.json({ message: 'task updated', updatedTask });
+  } catch (err) {
+    next(err);
   }
 }
 
 
-async function deleteTask(req: Request, res: Response) {
+async function deleteTask(req: Request, res: Response, next: NextFunction) {
   try {
     const { taskId } = req.params;
-    const deletedTask = await taskService.deleteTask(taskId);
-    if (!deletedTask) throw new Error("delete task failed");
+    await taskService.deleteTask(taskId);
     res.json({ message: 'task deleted' });
-  } catch (e) {
-    console.log("deleteTaskItems ", e);
-    res.status(500).json({ error: '500 deleteTask' });
+  } catch (err) {
+    next(err);
   }
 }
 
