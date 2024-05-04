@@ -42,10 +42,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isAuthContextLoading, setIsAuthContextLoading] = useState(true);
 
-  async function fetchUserId(emailId: string) {
+  async function fetchUserId(email: string) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/user?emailId=${emailId}`
+        `http://localhost:3000/api/user?email=${email}`
       );
       if (!response.ok) {
         throw new Error("unable to fetch userId");
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const response = await fetch("http://localhost:3000/api/user", {
       method: "POST",
       body: JSON.stringify({
-        emailId: email,
+        email: email,
       }),
       headers: {
         "Content-Type": "application/json",
