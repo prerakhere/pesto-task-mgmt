@@ -4,6 +4,8 @@ import TaskStatusSelect from "./TaskStatusSelect";
 import TaskDatePicker from "./TaskDatePicker";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { isTaskDescInvalid, isTaskNameInvalid } from "../utils/TaskUtils";
+import TextFieldError from "./TextFieldError";
 
 interface ITaskModalProps {
   id: number;
@@ -27,7 +29,11 @@ const TaskModal = ({
   const [modalStatus, setModalStatus] = useState<
     "todo" | "inprogress" | "done"
   >(status);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({
+    titleErr: "",
+    descErr: "",
+  });
 
   const { userId } = useAuth();
 
@@ -39,104 +45,128 @@ const TaskModal = ({
   //   }
   // }, []);
 
+  function resetModalState() {
+    setModalTitle("");
+    setModalDesc("");
+    setModalStatus("todo");
+    setIsModalOpen(false);
+  }
+
   async function handleTaskSave(e: any) {
     e.preventDefault();
-    console.log("modalTitle... ", modalTitle);
-    console.log("modalDesc... ", modalDesc);
-    console.log("modalStatus... ", modalStatus);
-    if (id === 0) {
-      // this is a new task
-      // save the task
-      // close the modal
-      // re-render the task list
-      // triggerRerender();
-      try {
-        setLoading(true);
-        const response = await fetch(
-          `http://localhost:3000/api/${userId}/task`,
-          {
-            method: "POST",
-            body: JSON.stringify({
-              title: modalTitle,
-              description: modalDesc,
-              status: modalStatus,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
+    setIsLoading(true);
+    setFieldErrors({
+      titleErr: "",
+      descErr: "",
+    });
+    const titleErr = isTaskNameInvalid(modalTitle);
+    const descErr = isTaskDescInvalid(modalDesc);
+    if (titleErr || descErr) {
+      console.log(titleErr, descErr);
+      if (titleErr)
+        setFieldErrors((err) => ({
+          ...err,
+          titleErr,
+        }));
+      if (descErr)
+        setFieldErrors((err) => ({
+          ...err,
+          descErr,
+        }));
+      setIsLoading(false);
+      return;
+    }
+    if (userId) {
+      if (id === 0) {
+        // new task
+        try {
+          setIsLoading(true);
+          const response = await fetch(
+            `http://localhost:3000/api/${userId}/task`,
+            {
+              method: "POST",
+              body: JSON.stringify({
+                title: modalTitle,
+                description: modalDesc,
+                status: modalStatus,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error("unable to add task");
           }
-        );
-        if (!response.ok) {
-          throw new Error("unable to add task");
+          const data = await response.json();
+          console.log("?????//  data  ??????//");
+          if (data.message === "task created") {
+            console.log("task saved");
+            resetModalState();
+            triggerRerender();
+          }
+        } catch (err: any) {
+          console.log("Something went wrong!");
+          resetModalState();
         }
-        const data = await response.json();
-        console.log("?????//  data  ??????//");
-        if (data.message === "Task created") {
-          console.log("task saved");
-          setModalTitle("");
-          setModalDesc("");
-          setModalStatus("todo");
-          setIsModalOpen(false);
-          triggerRerender();
+      } else {
+        // existing task
+        try {
+          setIsLoading(true);
+          const response = await fetch(
+            `http://localhost:3000/api/${userId}/task/${id}`,
+            {
+              method: "PUT",
+              body: JSON.stringify({
+                title: modalTitle,
+                description: modalDesc,
+                status: modalStatus,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error("unable to update task");
+          }
+          const data = await response.json();
+          console.log("?????//  data  ??????//");
+          if (data.message === "task updated") {
+            console.log("task updated");
+            resetModalState();
+            triggerRerender();
+          }
+        } catch (err: any) {
+          console.log("Something went wrong!");
+          resetModalState();
         }
-      } catch (err: any) {
-        console.log("Something went wrong!");
-        setModalTitle("");
-        setModalDesc("");
-        setModalStatus("todo");
-        setIsModalOpen(false);
       }
     } else {
-      // this is an existing task
-      // update the task
-      // close the modal
-      // re-render the task list
-      try {
-        setLoading(true);
-        const response = await fetch(
-          `http://localhost:3000/api/${userId}/task/${id}`,
-          {
-            method: "PUT",
-            body: JSON.stringify({
-              title: modalTitle,
-              description: modalDesc,
-              status: modalStatus,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("unable to update task");
-        }
-        const data = await response.json();
-        console.log("?????//  data  ??????//");
-        if (data.message === "task updated") {
-          console.log("task updated");
-          setModalTitle("");
-          setModalDesc("");
-          setModalStatus("todo");
-          setIsModalOpen(false);
-          triggerRerender();
-        }
-      } catch (err: any) {
-        console.log("Something went wrong!");
-        setModalTitle("");
-        setModalDesc("");
-        setModalStatus("todo");
-        setIsModalOpen(false);
-      }
+      // save to local storage
+      const tasksJSON = localStorage.getItem("tasksJSON");
+      const taskList = tasksJSON ? JSON.parse(tasksJSON) : [];
+      const newTask = {
+        title: modalTitle,
+        description: modalDesc,
+        status: modalStatus,
+        created_at: new Date().toISOString(),
+      };
+      taskList.push(newTask);
+      localStorage.setItem("tasksJSON", JSON.stringify(taskList));
+      resetModalState();
+      triggerRerender();
     }
   }
 
   function handleCancelClick() {
     if (id === 0) {
-      setModalTitle("");
-      setModalDesc("");
-      setModalStatus("todo");
+      resetModalState();
+      setFieldErrors({
+        titleErr: "",
+        descErr: "",
+      });
     }
-    setIsModalOpen(false);
   }
 
   function handleTaskDelete(e: any) {
@@ -162,7 +192,7 @@ const TaskModal = ({
         Edit task
       </Dialog.Description> */}
         <div className="m-8">
-          <fieldset className="flex flex-col sm:flex-row">
+          <fieldset className="flex flex-col sm:flex-row relative">
             <label className="text-[14px] w-[90px]" htmlFor="title">
               Title
             </label>
@@ -174,8 +204,11 @@ const TaskModal = ({
               value={modalTitle}
               onChange={(e) => setModalTitle(e.target.value)}
             />
+            <span className="absolute sm:ml-[90px] -bottom-[18px]">
+              <TextFieldError error={fieldErrors.titleErr} />
+            </span>
           </fieldset>
-          <fieldset className="mt-5 sm:mt-6 flex flex-col sm:flex-row">
+          <fieldset className="mt-9 flex flex-col sm:flex-row relative">
             <label className="w-[90px] text-[14px]" htmlFor="description">
               Description
             </label>
@@ -186,8 +219,11 @@ const TaskModal = ({
               value={modalDesc}
               onChange={(e) => setModalDesc(e.target.value)}
             />
+            <span className="absolute sm:ml-[90px] -bottom-[18px]">
+              <TextFieldError error={fieldErrors.descErr} />
+            </span>
           </fieldset>
-          <div className="flex flex-col sm:flex-row mt-5 sm:mt-6 justify-between">
+          <div className="flex flex-col sm:flex-row mt-9 justify-between">
             <fieldset className="flex items-center w-full sm:w-1/2 focus:ring-0">
               <label
                 className="w-[90px] sm:w-[90px] text-[15px]"
@@ -199,12 +235,6 @@ const TaskModal = ({
                 status={status}
                 setModalStatus={setModalStatus}
               />
-            </fieldset>
-            <fieldset className="flex items-center w-full sm:w-1/2 sm:justify-end mt-4 sm:mt-0">
-              <label className="text-[15px] w-[90px]" htmlFor="dueDate">
-                Due Date
-              </label>
-              <TaskDatePicker />
             </fieldset>
           </div>
           <div className="mt-12 flex justify-end">

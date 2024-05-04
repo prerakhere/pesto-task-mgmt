@@ -98,10 +98,11 @@ function Home() {
   console.log("--------userId---------- ", userId);
 
   useEffect(() => {
-    if (userId) {
-      setAreTasksLoading(true);
-      const fetchTasks = async () => {
+    const fetchTasks = async () => {
+      if (userId) {
         try {
+          setAreTasksLoading(true);
+          localStorage.removeItem("tasksJSON");
           const response = await fetch(
             `http://localhost:3000/api/${userId}/task`
           );
@@ -111,16 +112,51 @@ function Home() {
           const resData = await response.json();
           console.log("---resData---");
           console.log(resData);
+          if (resData.allTasks.length === 0) {
+            const tasksJSON = localStorage.getItem("tasksJSON");
+            if (tasksJSON) {
+              const lsTasks = JSON.parse(tasksJSON);
+              if (Array.isArray(lsTasks) && lsTasks.length > 0) {
+                console.log("saving bulk tasks...");
+                const response = await fetch(
+                  `http://localhost:3000/api/${userId}/tasks`,
+                  {
+                    method: "POST",
+                    body: JSON.stringify(lsTasks),
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+                if (!response.ok) {
+                  throw new Error("unable to add task");
+                }
+                const data = await response.json();
+                console.log("?????//  data  ??????//");
+                if (data.message === "tasks created") {
+                  console.log("tasks saved");
+                }
+              }
+            }
+          }
           setTasks(resData.allTasks);
-          setAreTasksLoading(false);
         } catch (err) {
           console.log(err);
         }
-      };
-
-      fetchTasks();
-    }
-    if (!userId) setTasks([]);
+      } else {
+        const tasksJSON = localStorage.getItem("tasksJSON");
+        if (!tasksJSON) setTasks([]);
+        else {
+          const lsTaskList = JSON.parse(tasksJSON) || [];
+          console.log("----lsTasklist---");
+          console.log(lsTaskList);
+          setTasks(lsTaskList);
+        }
+      }
+      // setAreTasksLoading(false);
+    };
+    fetchTasks();
+    // if (!userId) setTasks([]);
   }, [userId, trigger]);
 
   return (

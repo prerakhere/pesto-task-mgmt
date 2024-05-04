@@ -52,9 +52,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
       const data = await response.json();
       console.log("?????//  data with userId  ??????//");
-      console.log(data.userData.id);
-      // userId = data.userData.id;
-      setUserId(data.userData.id);
+      console.log(data.userId);
+      // userId = data.userId;
+      setUserId(data.userId);
     } catch (err: any) {
       console.log(err.message);
       // setError(err.message);
@@ -142,6 +142,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await supabase.auth.signOut();
     setUser(null);
     setUserId("");
+    localStorage.removeItem("tasksJSON");
   };
 
   const value = {
