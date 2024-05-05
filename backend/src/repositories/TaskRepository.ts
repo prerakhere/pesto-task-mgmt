@@ -1,5 +1,5 @@
 import supabase from "../../config/db-config";
-import Task from "./response-contracts/ITask";
+import Task from "../domain/Task";
 import ITaskRepository from "./interfaces/ITaskRepository";
 import BaseError from "../utils/ErrorHandler";
 
@@ -33,9 +33,9 @@ export default class TaskRepository implements ITaskRepository {
     try {
       const { data, error } = await supabase.from('task').insert({
         user_id: userId,
-        title: newTask.title,
-        description: newTask.description,
-        status: newTask.status
+        title: newTask.getTitle(),
+        description: newTask.getDescription(),
+        status: newTask.getStatus()
       }).select();
       if (error) throw new BaseError(500, "createTask repository: can't create task");
       return data[0];
@@ -49,7 +49,9 @@ export default class TaskRepository implements ITaskRepository {
       const tasksWithUserId = tasks.map((task) => {
         return {
           user_id: userId,
-          ...task
+          title: task.getTitle(),
+          description: task.getDescription(),
+          status: task.getStatus()
         };
       });
       const { error } = await supabase.from('task').insert(tasksWithUserId);
@@ -66,9 +68,9 @@ export default class TaskRepository implements ITaskRepository {
         throw new BaseError(500, "updateTask repository: task with this id does not exist");
       }
       const { error, data } = await supabase.from('task').update({
-        title: taskToBeUpdated.title,
-        description: taskToBeUpdated.description,
-        status: taskToBeUpdated.status
+        title: taskToBeUpdated.getTitle(),
+        description: taskToBeUpdated.getDescription(),
+        status: taskToBeUpdated.getStatus()
       }).eq('id', taskId).select();
       if (error) throw new BaseError(500, "updateTask repository: can't update task");
       return data[0];

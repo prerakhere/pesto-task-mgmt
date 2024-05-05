@@ -1,4 +1,6 @@
+import User from "../domain/User";
 import UserRepository from "../repositories/UserRepository";
+import IUser from "../repositories/contracts/IUser";
 
 export default class UserService {
   private userRepository: UserRepository;
@@ -15,13 +17,12 @@ export default class UserService {
     }
   }
 
-  async saveUser(email: string) {
+  async saveUser(userToCreate: IUser) {
     try {
-      await this.userRepository.saveUser(email);
+      const newUser = new User({ email: userToCreate.email });
+      await this.userRepository.saveUser(newUser);
     } catch (err) {
       throw err;
     }
   }
-
-
 }

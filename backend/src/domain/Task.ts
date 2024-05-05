@@ -1,37 +1,38 @@
-interface TaskOptions {
+interface TaskAttributes {
+  id?: string;
   title: string;
   description: string;
-  status: TaskStatus;
-  // dueDate?: Date;
+  status: "todo" | "inprogress" | "done";
+  created_at?: string;
 }
 
-export class Task {
+export default class Task {
   private id?: string;
   private title = "";
   private description = "";
-  private status = TaskStatus.Todo;
-  private dueDate: any | null;
+  private status = "todo";
+  private created_at?: string;
 
-  constructor({ title, description, status }: TaskOptions) {
+  constructor({ title, description, status, created_at }: TaskAttributes) {
     this.title = title;
     this.description = description;
     this.status = status;
-    // this.dueDate = dueDate;
+    this.created_at = created_at;
   }
 
-  setTitle(title: string) {
-    this.title = title;
+  getTitle() {
+    return this.title;
   }
 
-  setDescription(description: string) {
-    this.description = description;
+  getDescription() {
+    return this.description;
   }
 
-  setStatus(status: TaskStatus) {
-    this.status = status;
+  getStatus() {
+    return this.status;
   }
 
-  // setDueDate(dueDate: any) {
-  //   this.dueDate = dueDate;
-  // }
+  getCreatedAt() {
+    return this.created_at;
+  }
 }

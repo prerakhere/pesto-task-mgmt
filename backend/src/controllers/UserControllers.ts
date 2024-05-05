@@ -22,10 +22,10 @@ async function getUserId(req: Request, res: Response, next: NextFunction) {
 
 async function saveUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const { error, value } = signUpValidator(req.body);
+    const { error } = signUpValidator(req.body);
     if (error) throw new BaseError(400, "invalid payload");
     const { email } = req.body;
-    await userService.saveUser(email as string);
+    await userService.saveUser({ email });
     res.json({ message: "user saved" });
   } catch (err) {
     next(err);

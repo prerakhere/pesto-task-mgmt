@@ -21,7 +21,7 @@ async function getAllTasks(req: Request, res: Response, next: NextFunction) {
 
     // sorting in descending order of timestamp - default of last added first
     allTasks.forEach((task) => {
-      task.created_at = new Date(Date.parse(task.created_at));
+      task.created_at = new Date(Date.parse(task.getCreatedAt()!));
     });
     allTasks.sort((t1, t2) => t2.created_at - t1.created_at);
     res.json({ allTasks });
@@ -68,11 +68,6 @@ async function createTasks(req: Request, res: Response, next: NextFunction) {
     const { error } = tasksValidator(req.body);
     if (error) throw new BaseError(400, "invalid task payload");
     const tasks = req.body;
-    // const taskParams = {
-    //   title: title,
-    //   description: description,
-    //   status: status
-    // };
     await taskService.createTasks(userId, tasks);
     res.json({ message: 'tasks created' });
   } catch (err) {

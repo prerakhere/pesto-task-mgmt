@@ -1,7 +1,7 @@
 import supabase from "../../config/db-config";
-import IUser from "./response-contracts/IUser";
 import IUserRepository from "./interfaces/IUserRepository";
 import BaseError from "../utils/ErrorHandler";
+import User from "../domain/User";
 
 
 export default class UserRepository implements IUserRepository {
@@ -16,10 +16,10 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async saveUser(email: string) {
+  async saveUser(user: User) {
     try {
       const { status, error } = await supabase.from('user').insert({
-        email
+        email: user.getEmail()
       });
       if (error || status !== 201) {
         throw new BaseError(500, "saveUser repository: can't save user");

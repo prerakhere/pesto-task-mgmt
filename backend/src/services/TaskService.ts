@@ -1,4 +1,5 @@
-import Task from "../repositories/response-contracts/ITask";
+import Task from "../domain/Task";
+import ITask from "../repositories/contracts/ITask";
 import TaskRepository from "../repositories/TaskRepository";
 
 export default class TaskService {
@@ -25,25 +26,42 @@ export default class TaskService {
     }
   }
 
-  async createTask(userId: string, newTask: Task) {
+  async createTask(userId: string, taskToCreate: ITask) {
     try {
+      const newTask = new Task({
+        title: taskToCreate.title,
+        description: taskToCreate.description,
+        status: taskToCreate.status
+      });
       return await this.taskRepository.createTask(userId, newTask);
     } catch (err) {
       throw err;
     }
   }
 
-  async createTasks(userId: string, tasks: Task[]) {
+  async createTasks(userId: string, tasksToCreate: ITask[]) {
     try {
+      const tasks = tasksToCreate.map((taskToCreate) => {
+        return new Task({
+          title: taskToCreate.title,
+          description: taskToCreate.description,
+          status: taskToCreate.status
+        });
+      });
       await this.taskRepository.createTasks(userId, tasks);
     } catch (err) {
       throw err;
     }
   }
 
-  async updateTask(taskId: string, taskToBeUpdated: Task) {
+  async updateTask(taskId: string, taskToBeUpdated: ITask) {
     try {
-      return await this.taskRepository.updateTask(taskId, taskToBeUpdated);
+      const task = new Task({
+        title: taskToBeUpdated.title,
+        description: taskToBeUpdated.description,
+        status: taskToBeUpdated.status
+      });
+      return await this.taskRepository.updateTask(taskId, task);
     } catch (err) {
       throw err;
     }
