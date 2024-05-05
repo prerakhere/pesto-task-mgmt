@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { isTaskDescInvalid, isTaskNameInvalid } from "../utils/TaskUtils";
 import TextFieldError from "./TextFieldError";
 import LoadingSpinner from "./LoadingSpinner";
+import { toast } from "react-toastify";
 
 interface ITaskModalProps {
   id: number;
@@ -42,6 +43,7 @@ const TaskModal = ({
     setModalTitle("");
     setModalDesc("");
     setModalStatus("todo");
+    setIsLoading(false);
     setIsModalOpen(false);
   }
 
@@ -73,7 +75,6 @@ const TaskModal = ({
       if (id === 0) {
         // new task
         try {
-          setIsLoading(true);
           const response = await fetch(
             `http://localhost:3000/api/${userId}/task`,
             {
@@ -99,13 +100,12 @@ const TaskModal = ({
             triggerRerender();
           }
         } catch (err: any) {
-          console.log("Something went wrong!");
+          toast.error("Something went wrong!");
           resetModalState();
         }
       } else {
         // existing task
         try {
-          setIsLoading(true);
           const response = await fetch(
             `http://localhost:3000/api/${userId}/task/${id}`,
             {
@@ -131,22 +131,26 @@ const TaskModal = ({
             triggerRerender();
           }
         } catch (err: any) {
-          console.log("Something went wrong!");
+          toast.error("Something went wrong!");
           resetModalState();
         }
       }
     } else {
       // save to local storage
-      const tasksJSON = localStorage.getItem("tasksJSON");
-      const taskList = tasksJSON ? JSON.parse(tasksJSON) : [];
-      const newTask = {
-        title: modalTitle,
-        description: modalDesc,
-        status: modalStatus,
-        created_at: new Date().toISOString(),
-      };
-      taskList.push(newTask);
-      localStorage.setItem("tasksJSON", JSON.stringify(taskList));
+      try {
+        const tasksJSON = localStorage.getItem("tasksJSON");
+        const taskList = tasksJSON ? JSON.parse(tasksJSON) : [];
+        const newTask = {
+          title: modalTitle,
+          description: modalDesc,
+          status: modalStatus,
+          created_at: new Date().toISOString(),
+        };
+        taskList.push(newTask);
+        localStorage.setItem("tasksJSON", JSON.stringify(taskList));
+      } catch (err) {
+        toast.error("Something went wrong!");
+      }
       resetModalState();
       triggerRerender();
     }
