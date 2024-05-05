@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
     if (error) throw new Error("supabase sign up unsuccessful");
     const response = await fetch(
-      `${import.meta.env.VITE_PROD_API_BASE_URL}/api/user`,
+      `${import.meta.env.VITE_PROD_API_BASE_URL}/user`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -113,15 +113,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         },
       }
     );
-    // const response = await fetch(`${import.meta.env.VITE_LOCAL_API_BASE_URL}/api/user`, {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     email: email,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
+    // const response = await fetch(
+    //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/user`,
+    //   {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       email: email,
+    //     }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
     if (!response.ok) {
       throw new Error("unable to save user to db");
     }
