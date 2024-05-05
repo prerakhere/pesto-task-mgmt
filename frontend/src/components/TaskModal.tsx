@@ -76,7 +76,7 @@ const TaskModal = ({
         // new task
         try {
           const response = await fetch(
-            `http://localhost:3000/api/${userId}/task`,
+            `${import.meta.env.VITE_PROD_API_BASE_URL}/${userId}/task`,
             {
               method: "POST",
               body: JSON.stringify({
@@ -89,6 +89,20 @@ const TaskModal = ({
               },
             }
           );
+          // const response = await fetch(
+          //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/${userId}/task`,
+          //   {
+          //     method: "POST",
+          //     body: JSON.stringify({
+          //       title: modalTitle,
+          //       description: modalDesc,
+          //       status: modalStatus,
+          //     }),
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //   }
+          // );
           if (!response.ok) {
             throw new Error("unable to add task");
           }
@@ -107,7 +121,7 @@ const TaskModal = ({
         // existing task
         try {
           const response = await fetch(
-            `http://localhost:3000/api/${userId}/task/${id}`,
+            `${import.meta.env.VITE_PROD_API_BASE_URL}/${userId}/task/${id}`,
             {
               method: "PUT",
               body: JSON.stringify({
@@ -120,6 +134,20 @@ const TaskModal = ({
               },
             }
           );
+          // const response = await fetch(
+          //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/${userId}/task/${id}`,
+          //   {
+          //     method: "PUT",
+          //     body: JSON.stringify({
+          //       title: modalTitle,
+          //       description: modalDesc,
+          //       status: modalStatus,
+          //     }),
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //   }
+          // );
           if (!response.ok) {
             throw new Error("unable to update task");
           }

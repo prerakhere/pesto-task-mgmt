@@ -100,8 +100,11 @@ function Home() {
           setAreTasksLoading(true);
           localStorage.removeItem("tasksJSON");
           const response = await fetch(
-            `http://localhost:3000/api/${userId}/task`
+            `${import.meta.env.VITE_PROD_API_BASE_URL}/${userId}/task`
           );
+          // const response = await fetch(
+          //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/${userId}/task`
+          // );
           if (!response.ok) {
             throw new Error("Failed to fetch data");
           }
@@ -115,7 +118,7 @@ function Home() {
               if (Array.isArray(lsTasks) && lsTasks.length > 0) {
                 console.log("saving bulk tasks...");
                 const response = await fetch(
-                  `http://localhost:3000/api/${userId}/tasks`,
+                  `${import.meta.env.VITE_PROD_API_BASE_URL}/${userId}/tasks`,
                   {
                     method: "POST",
                     body: JSON.stringify(lsTasks),
@@ -124,6 +127,15 @@ function Home() {
                     },
                   }
                 );
+                // const response = await fetch(
+                //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/${userId}/task`, {
+                //     method: "POST",
+                //     body: JSON.stringify(lsTasks),
+                //     headers: {
+                //       "Content-Type": "application/json",
+                //     },
+                //   }
+                // );
                 if (!response.ok) {
                   throw new Error("unable to add task");
                 }

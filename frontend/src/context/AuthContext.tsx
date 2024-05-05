@@ -45,8 +45,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   async function fetchUserId(email: string) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/user?email=${email}`
+        `${import.meta.env.VITE_PROD_API_BASE_URL}/user?email=${email}`
       );
+      // const response = await fetch(
+      //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/user?email=${email}`
+      // );
       if (!response.ok) {
         throw new Error("unable to fetch userId");
       }
@@ -98,15 +101,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       password,
     });
     if (error) throw new Error("supabase sign up unsuccessful");
-    const response = await fetch("http://localhost:3000/api/user", {
-      method: "POST",
-      body: JSON.stringify({
-        email: email,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_PROD_API_BASE_URL}/api/user`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    // const response = await fetch(`${import.meta.env.VITE_LOCAL_API_BASE_URL}/api/user`, {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     email: email,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
     if (!response.ok) {
       throw new Error("unable to save user to db");
     }
