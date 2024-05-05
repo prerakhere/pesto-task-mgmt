@@ -44,7 +44,6 @@ export default function Task({
             <div className="text-sm">
               <TaskStatus status={status} />
             </div>
-            {/* <div className="text-sm">due date</div> */}
           </div>
         </div>
       </Dialog.Trigger>

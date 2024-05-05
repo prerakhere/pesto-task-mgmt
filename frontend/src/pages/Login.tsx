@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../../config/auth-config";
 import { useAuth } from "../context/AuthContext";
 import { isEmailInvalid, isPasswordInvalid } from "../utils/AuthUtils";
 import TextFieldError from "../components/TextFieldError";

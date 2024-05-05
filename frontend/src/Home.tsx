@@ -43,11 +43,7 @@ function Home() {
     filterParam = "";
   }
 
-  if (
-    sortParam !== "lastadded" &&
-    sortParam !== "firstadded" &&
-    sortParam !== "duedate"
-  ) {
+  if (sortParam !== "lastadded" && sortParam !== "firstadded") {
     sortParam = "";
   }
 

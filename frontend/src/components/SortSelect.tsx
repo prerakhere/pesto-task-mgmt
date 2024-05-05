@@ -65,18 +65,6 @@ export default function SortSelect({
                     <CheckIcon />
                   </Select.ItemIndicator>
                 </Select.Item>
-                <Select.Item
-                  value="duedate"
-                  disabled
-                  className="text-[13px] text-gray-400 leading-none rounded-[3px] flex items-center h-[25px] pr-[35px] pl-[25px] relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-violet-400"
-                >
-                  <Select.ItemText className="flex">
-                    <span className="ml-1.5">Due Date</span>
-                  </Select.ItemText>
-                  <Select.ItemIndicator className="absolute left-0 w-[25px] inline-flex items-center justify-center">
-                    <CheckIcon />
-                  </Select.ItemIndicator>
-                </Select.Item>
               </Select.Group>
             </Select.Viewport>
           </Select.Content>

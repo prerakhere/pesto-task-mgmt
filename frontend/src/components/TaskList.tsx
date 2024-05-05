@@ -52,11 +52,11 @@ export default function TaskList({
   });
 
   useEffect(() => {
-    if (tasks.length) {
-      setTimeout(() => {
-        setAreTasksLoading(false);
-      }, 0);
-    }
+    // if (tasks.length) {
+    setTimeout(() => {
+      setAreTasksLoading(false);
+    }, 0);
+    // }
   }, [tasks]);
 
   return (
