@@ -21,7 +21,7 @@ async function getAllTasks(req: Request, res: Response, next: NextFunction) {
 
     // sorting in descending order of timestamp - default of last added first
     allTasks.forEach((task) => {
-      task.created_at = new Date(Date.parse(task.getCreatedAt()!));
+      task.created_at = new Date(Date.parse(task.created_at!));
     });
     allTasks.sort((t1, t2) => t2.created_at - t1.created_at);
     res.json({ allTasks });
