@@ -5,6 +5,8 @@ import TaskList from "./components/TaskList";
 import SortAndFilterBar from "./components/SortAndFilterBar";
 import SearchAndOptionsBar from "./components/SearchAndOptionsBar";
 import { useAuth } from "./context/AuthContext";
+import { toast } from "react-toastify";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -98,7 +100,7 @@ function Home() {
       if (userId) {
         try {
           setAreTasksLoading(true);
-          localStorage.removeItem("tasksJSON");
+
           const response = await fetch(
             `${import.meta.env.VITE_PROD_API_BASE_URL}/${userId}/task`
           );
@@ -128,7 +130,8 @@ function Home() {
                   }
                 );
                 // const response = await fetch(
-                //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/${userId}/task`, {
+                //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/${userId}/tasks`,
+                //   {
                 //     method: "POST",
                 //     body: JSON.stringify(lsTasks),
                 //     headers: {
@@ -143,13 +146,17 @@ function Home() {
                 console.log("?????//  data  ??????//");
                 if (data.message === "tasks created") {
                   console.log("tasks saved");
+                  localStorage.removeItem("tasksJSON");
+                  setTasks(lsTasks as any);
+                  return;
                 }
               }
             }
           }
+          localStorage.removeItem("tasksJSON");
           setTasks(resData.allTasks);
         } catch (err) {
-          console.log(err);
+          toast.error("Something went wrong!");
         }
       } else {
         const tasksJSON = localStorage.getItem("tasksJSON");
@@ -169,7 +176,11 @@ function Home() {
 
   return (
     <div className="flex justify-center mt-10 w-full">
-      {isAuthContextLoading ? null : (
+      {isAuthContextLoading ? (
+        <div className="mt-[40vh]">
+          <LoadingSpinner variant="large" color="light" />
+        </div>
+      ) : (
         <div className="w-11/12 xs:w-3/4 md:w-2/3 lg:w-7/12 max-w-[700px]">
           <Navbar />
           <SearchAndOptionsBar
