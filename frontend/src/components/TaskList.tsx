@@ -54,7 +54,7 @@ export default function TaskList({
   useEffect(() => {
     // if (tasks.length) {
     setTimeout(() => {
-      setAreTasksLoading(false);
+      if (tasks.length !== 0) setAreTasksLoading(false);
     }, 0);
     // }
   }, [tasks]);
@@ -81,11 +81,12 @@ export default function TaskList({
                   title: string;
                   description: string;
                   status: statusType;
+                  created_at: string;
                 }) => {
                   return (
                     <Task
                       {...task}
-                      key={task.id}
+                      key={task.id ? task.id : task.created_at}
                       triggerRerender={triggerRerender}
                     />
                   );
