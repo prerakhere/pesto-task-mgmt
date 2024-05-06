@@ -15,7 +15,7 @@
 - Users can filter tasks based on the task status.
 
 ### User Authentication:
-- Users cam signup and login with their email and password.
+- Users can signup and login with their email and password.
 
 ### Guest User Tasks:
 - Guest or unauthenticated users can save their tasks locally without an account.
