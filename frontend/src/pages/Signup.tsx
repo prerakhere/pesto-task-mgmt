@@ -85,7 +85,7 @@ export default function Signup() {
               handleSignup();
             }}
           >
-            <div className="border border-gray-300 px-16 pb-10 pt-8 w-5/6 max-w-[400px] rounded-md">
+            <div className="border border-gray-300 px-7 subxs:px-9 xs:px-14 sm:px-16 pb-10 pt-8 w-5/6 max-w-[400px] rounded-md">
               <h1 className="text-center text-1.5xl font-semibold">Signup</h1>
               <div className="mt-10">
                 <label
