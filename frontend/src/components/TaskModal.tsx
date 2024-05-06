@@ -1,5 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon, TrashIcon } from "@radix-ui/react-icons";
 import TaskStatusSelect from "./TaskStatusSelect";
 import TaskDatePicker from "./TaskDatePicker";
 import { useEffect, useState } from "react";
@@ -31,7 +31,8 @@ const TaskModal = ({
   const [modalStatus, setModalStatus] = useState<
     "todo" | "inprogress" | "done"
   >(status);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSaveBtnLoading, setIsSaveBtnLoading] = useState(false);
+  const [isDeleteBtnLoading, setIsDeleteBtnLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({
     titleErr: "",
     descErr: "",
@@ -43,13 +44,14 @@ const TaskModal = ({
     setModalTitle("");
     setModalDesc("");
     setModalStatus("todo");
-    setIsLoading(false);
+    setIsSaveBtnLoading(false);
+    setIsDeleteBtnLoading(false);
     setIsModalOpen(false);
   }
 
   async function handleTaskSave(e: any) {
     e.preventDefault();
-    setIsLoading(true);
+    setIsSaveBtnLoading(true);
     setFieldErrors({
       titleErr: "",
       descErr: "",
@@ -68,7 +70,7 @@ const TaskModal = ({
           ...err,
           descErr,
         }));
-      setIsLoading(false);
+      setIsSaveBtnLoading(false);
       return;
     }
     if (userId) {
@@ -194,12 +196,35 @@ const TaskModal = ({
     }
   }
 
-  function handleTaskDelete(e: any) {
+  async function handleTaskDelete(e: any) {
     e.preventDefault();
-    if (id === 0) {
-      // this is a new task
-    } else {
-      // this is an existing task
+    setIsDeleteBtnLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_PROD_API_BASE_URL}/${userId}/task/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      // const response = await fetch(
+      //   `${import.meta.env.VITE_LOCAL_API_BASE_URL}/${userId}/task/${id}`,
+      //   {
+      //     method: "DELETE",
+      //   }
+      // );
+      if (!response.ok) {
+        throw new Error("unable to delete task");
+      }
+      const data = await response.json();
+      console.log("?????//  data  ??????//");
+      if (data.message === "task deleted") {
+        console.log("task deleted");
+        resetModalState();
+        triggerRerender();
+      }
+    } catch (err: any) {
+      toast.error("Something went wrong!");
+      resetModalState();
     }
   }
 
@@ -262,27 +287,46 @@ const TaskModal = ({
               />
             </fieldset>
           </div>
-          <div className="mt-12 flex justify-end">
-            <Dialog.Close asChild>
-              <div>
-                <button
-                  className="bg-white text-black border border-gray-700 focus:shadow-none items-center justify-center rounded-sm py-3 w-[90px] text-sm font-medium leading-none focus:outline-none"
-                  onClick={handleCancelClick}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-violet-700 text-white border border-violet-700 focus:shadow-none items-center justify-center rounded-sm py-3 w-[90px] text-sm font-medium leading-none focus:outline-none ml-4"
-                  disabled={isLoading}
-                  onClick={handleTaskSave}
-                >
-                  <span className="">Save</span>
-                  {isLoading && (
+          <div className="mt-12 flex justify-between items-center">
+            <div className=" ">
+              {id > 0 && (
+                <>
+                  <button
+                    className="text-red-600 text-sm pl-1 pr-1.5 py-0.5 border border-white rounded hover:border-red-600"
+                    onClick={handleTaskDelete}
+                    disabled={isDeleteBtnLoading || isSaveBtnLoading}
+                  >
+                    <TrashIcon className="inline align-middle mb-[3px] mr-[3px] w-4 h-4" />
+                    Delete
+                  </button>
+                  {isDeleteBtnLoading && (
                     <LoadingSpinner variant="button" color="light" />
                   )}
-                </button>
-              </div>
-            </Dialog.Close>
+                </>
+              )}
+            </div>
+            <div>
+              <Dialog.Close asChild>
+                <div>
+                  <button
+                    className="bg-white text-black border border-gray-700 focus:shadow-none items-center justify-center rounded-sm py-2.5 w-[90px] text-sub-base font-medium leading-none focus:outline-none"
+                    onClick={handleCancelClick}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="bg-violet-700 text-white border border-violet-700 focus:shadow-none items-center justify-center rounded-sm py-2.5 w-[90px] text-sub-base font-medium leading-none focus:outline-none ml-4"
+                    disabled={isSaveBtnLoading || isDeleteBtnLoading}
+                    onClick={handleTaskSave}
+                  >
+                    <span className="">Save</span>
+                    {isSaveBtnLoading && (
+                      <LoadingSpinner variant="button" color="light" />
+                    )}
+                  </button>
+                </div>
+              </Dialog.Close>
+            </div>
           </div>
           <Dialog.Close asChild>
             <button
