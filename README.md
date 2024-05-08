@@ -1,6 +1,24 @@
 ## pesto.tech - Task Management
-- This is a technical assignment for pesto.tech. based on this [problem statement](https://github.com/prerakhere/pesto-task-mgmt/blob/main/prob-statement.md).
+- This is a technical assignment for [pesto.tech](https://pesto.tech) based on this [problem statement](https://github.com/prerakhere/pesto-task-mgmt/blob/main/prob-statement.md).
 - Live link - [bit.ly/pesto-task-mgmt](https://bit.ly/pesto-task-mgmt)
+
+## Contents
+- [Features Overview](#features-overview)
+  - [Task Management](#task-management)
+  - [Searching, Sorting and Filtering](#searching-sorting-and-filtering)
+  - [User Authentication](#user-authentication)
+  - [Guest User Operations](#guest-user-operations)
+- [Technical Overview](#technical-overview)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+    - [Database](#database)
+    - [Auth Provider](#auth-provider)
+    - [Infra](#infra)
+    - [Testing](#testing)
+- [Architecture and Hosting](#architecture-and-hosting)
+
+
+
 
 ## Features Overview
 
@@ -9,7 +27,7 @@
 - Each task consists of a title, an optional description, and a status.
 - A task's status can be one of these three - Todo, In Progress, Done.
 
-### Search, Sorting and Filtering:
+### Searching, Sorting and Filtering:
 - Tasks can be searched using search bar.
 - Tasks can be sorted based on the time they were last added or first added.
 - Users can filter tasks based on the task status.
@@ -17,7 +35,7 @@
 ### User Authentication:
 - Users can signup and login with their email and password.
 
-### Guest User Tasks:
+### Guest User Operations:
 - Guest or unauthenticated users can save their tasks locally without an account.
 - Local tasks gets synced to their account once a user signs up.
 
